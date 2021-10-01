@@ -1,12 +1,7 @@
-import { useEffect } from "react";
 import Carousel from "../components/Carousel";
 import { Link } from "react-router-dom";
 
 function Index() {
-	useEffect(() => {
-		document.title = "Home";
-	}, []);
-
 	return (
 		<>
 			<div className="tophalf">
@@ -41,3 +36,15 @@ function Index() {
 }
 
 export default Index;
+
+// import Carousel from "../components/Carousel";
+
+// function Home() {
+// 	return (
+// 		<div className="navSpace" style={{ width: "1000px" }}>
+// 			{/* <Carousel /> */}
+// 		</div>
+// 	);
+// }
+
+// export default Home;

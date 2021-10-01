@@ -1,34 +1,40 @@
+// import "slick-carousel/slick/slick.css";
+// import "slick-carousel/slick/slick-theme.css";
+
+import dnd from "../img/dnd.jpg";
+import grow from "../img/grow.jpg";
+import chess from "../img/chess.jpg";
+import brew from "../img/brew.jpg";
+import "../Carousel.css";
+import Slider from "react-slick";
+
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { useState } from "react";
+
+const imgArr = [dnd, grow, chess, brew];
+
 function Carousel() {
+	const [imgIdx, setImgIdx] = useState(0);
+
+	const settings = {
+		// arrows: true,
+		infinite: true,
+		// lazyLoad: true,
+		speed: 300,
+		slidesToShow: 3,
+		centerMode: true,
+		centerPadding: 0,
+		beforeChange: (cur, next) => setImgIdx(next),
+	};
 	return (
-		<>
-			<div className="slider">
-				<button className="slidebtn"> {"<"} </button>
-				<div className="cardWrapper">
-					<ul className="cardContainer">
-						<li className="card">
-							<a href="/">
-								<img src="./img/grow.jpg" alt="" />
-							</a>
-						</li>
-						<li className="card">
-							<a href="./community.html">
-								<img src="./img/dnd.jpg" alt="" />
-							</a>
-						</li>
-						<li className="card">
-							<a href="/">
-								<img src="./img/dough.jpg" alt="" />
-							</a>
-						</li>
-						{/* <!-- <li className="card">community 4</li>
-                        <li className="card">community 5</li> --> */}
-						{/* <!-- <li className="card">community 6</li>
-                        <li className="card">community 7</li> --> */}
-					</ul>
+		<Slider {...settings} className="carouselBox">
+			{imgArr.map((item, idx) => (
+				<div className={idx === imgIdx ? "slide activeSlide" : "slide"}>
+					<img className="image" src={item} alt={item} />
 				</div>
-				<button className="slidebtn">{">"}</button>
-			</div>
-		</>
+			))}
+		</Slider>
 	);
 }
 

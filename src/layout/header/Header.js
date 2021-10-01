@@ -1,6 +1,10 @@
 import logo from "../../img/logo.png";
 import { Link } from "react-router-dom";
+import { useHeaderHere } from "../../components/contexts/HeaderHereContext";
+
 function Header() {
+	const { here } = useHeaderHere();
+
 	return (
 		<>
 			<header className="headerPic">
@@ -13,16 +17,16 @@ function Header() {
 						<button className="btn srchbtn">Search</button>
 					</div>
 					<ul className="navbar head">
-						<li className="here">
+						<li className={here === "/" ? `here` : ""}>
 							<Link to="/">Home</Link>
 						</li>
-						<li>
+						<li className={here === "/browse" ? `here` : ""}>
 							<Link to="/browse">Browse</Link>
 						</li>
-						<li>
+						<li className={here === "/signup" ? `here` : ""}>
 							<Link to="/signup">Sign Up</Link>
 						</li>
-						<li>
+						<li className={here === "/login" ? `here` : ""}>
 							<Link to="/login">Log In</Link>
 						</li>
 					</ul>
