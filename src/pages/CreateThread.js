@@ -2,16 +2,16 @@ import CommunitySettingsSideBar from "../components/sidebars/CommunitySettingsSi
 import CommunitySettingsContainer from "../layout/CommunitySettingsContainer";
 import CreateContainer from "../layout/settings/CreateContainer";
 
-function CreateCommunity() {
+function CreateThread() {
 	return (
 		<>
 			<CommunitySettingsContainer>
 				<CommunitySettingsSideBar />
 
-				<CreateContainer type="community" />
+				<CreateContainer />
 			</CommunitySettingsContainer>
 		</>
 	);
 }
 
-export default CreateCommunity;
+export default CreateThread;

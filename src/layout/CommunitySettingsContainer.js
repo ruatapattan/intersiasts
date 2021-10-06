@@ -5,7 +5,7 @@ function CommunitySettingsContainer(props) {
 	return (
 		<>
 			<section>
-				<div class="container compartment navSpace">{props.children}</div>
+				<div className="container compartment navSpace">{props.children}</div>
 			</section>
 		</>
 	);

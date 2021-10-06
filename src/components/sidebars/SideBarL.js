@@ -1,34 +1,33 @@
+import { Link } from "react-router-dom";
+
 function SideBarL() {
 	return (
-		<div class="sidebar left">
-			<div class="sidebarContent">
-				<a href="/" class="status">
+		<div className="sidebar left">
+			<div className="sidebarContent">
+				<Link to="/" className="status">
 					Status: Online
-				</a>
-				<a href="/" class="profile here">
+				</Link>
+				<Link to="/" className="profile here">
 					Profile
-				</a>
-				<a href="/" class="notification">
+				</Link>
+				<Link to="/" className="notification">
 					Notifications
-				</a>
-				<a href="/" class="activities Log">
+				</Link>
+				<Link to="/" className="activities Log">
 					Activities Log
-				</a>
-				<a href="./editProfile.html" class="editProfile">
+				</Link>
+				<Link to="./editProfile.html" className="editProfile">
 					Edit Profile
-				</a>
-				<a href="/" class="characterSheet">
-					Character Sheet
-				</a>
+				</Link>
 				<br />
 			</div>
 
-			<div class="plus">
+			{/* <div className="plus">
 				<p>Try plus for 30 days!</p>
-				<div class="btn plusbtn">
-					<a href="/">Go Plus</a>
+				<div className="btn plusbtn">
+					<Link to="/">Go Plus</Link>
 				</div>
-			</div>
+			</div> */}
 		</div>
 	);
 }

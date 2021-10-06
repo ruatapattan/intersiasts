@@ -5,26 +5,26 @@ import UserBar from "../components/userbar.js/UserBar";
 function Chat() {
 	return (
 		<>
-			{/* <div class="chatContainer"> */}
+			{/* <div className="chatContainer"> */}
 
 			<section>
-				<div class="container compartment navSpace">
+				<div className="container compartment navSpace">
 					<SideBarLChat />
 
-					<div class="center">
-						<div class="centerContent"></div>
+					<div className="center">
+						<div className="centerContent"></div>
 					</div>
 
 					<SideBarR />
 				</div>
 			</section>
 
-			<div class="textInputContainer container">
+			<div className="textInputContainer container">
 				<UserBar />
 
-				<div class="textBar">
-					<input type="text" name="chatInputBar" class="chatInputBar" />
-					<button class="btn sendmsgbtn">Send</button>
+				<div className="textBar">
+					<input type="text" name="chatInputBar" className="chatInputBar" />
+					<button className="btn sendmsgbtn">Send</button>
 				</div>
 			</div>
 			{/* </div> */}

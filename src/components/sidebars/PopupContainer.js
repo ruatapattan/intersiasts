@@ -2,26 +2,26 @@ function PopupContainer(props) {
 	return (
 		<div className="popupBox">
 			<div>
-				<p class="notiLabel popupLabel">
+				<p className="notiLabel popupLabel">
 					{/* Notifications: <span>2</span> */}
 					Status: <span>Online</span>
 				</p>
 
 				{/* will be mapped */}
-				<div class="onlineStatusItem popupItem">
-					<div class="popupText">
+				<div className="onlineStatusItem popupItem">
+					<div className="popupText">
 						<p>Online</p>
 					</div>
 				</div>
 
-				<div class="onlineStatusItem popupItem">
-					<div class="popupText">
+				<div className="onlineStatusItem popupItem">
+					<div className="popupText">
 						<p>Away</p>
 					</div>
 				</div>
 
-				<div class="onlineStatusItem popupItem">
-					<div class="popupText">
+				<div className="onlineStatusItem popupItem">
+					<div className="popupText">
 						<p>Do not disturb</p>
 					</div>
 				</div>

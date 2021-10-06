@@ -1,41 +1,43 @@
+import { Link } from "react-router-dom";
+
 function SideBarR() {
 	return (
-		<div class="sidebar right">
-			<div class="sidebarContent friendList">
-				<p class="textCenter">Friends</p>
-				<div class="friend">
-					<div class="userPic">
-						<a href="/">
+		<div className="sidebar right">
+			<div className="sidebarContent friendList">
+				<p className="textCenter">Friends</p>
+				<div className="friend">
+					<div className="userPic">
+						<Link to="/">
 							<img src="./img/pepe.png" alt="" />
-						</a>
+						</Link>
 					</div>
 					<p>P€P€</p>
 				</div>
-				<div class="friend">
-					<div class="userPic">
-						<a href="/">
+				<div className="friend">
+					<div className="userPic">
+						<Link to="/">
 							<img src="./img/alexd.jpg" alt="" />
-						</a>
+						</Link>
 					</div>
 					<p>AleXD</p>
 				</div>
-				<div class="friend">
-					<div class="userPic">
-						<a href="/">
+				<div className="friend">
+					<div className="userPic">
+						<Link to="/">
 							<img src="./img/sprout.jpg" alt="" />
-						</a>
+						</Link>
 					</div>
 					<p>sprout</p>
 				</div>
 			</div>
 
-			<div class="sidebarContent groupList">
-				<p class="textCenter">Groups</p>
-				<div class="group">
-					<div class="userPic">
-						<a href="./chat.html">
+			<div className="sidebarContent groupList">
+				<p className="textCenter">Groups</p>
+				<div className="group">
+					<div className="userPic">
+						<Link to="./chat.html">
 							<img src="./img/groupPic.jpg" alt="" />
-						</a>
+						</Link>
 					</div>
 					<p>Broskis</p>
 				</div>

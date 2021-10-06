@@ -3,8 +3,8 @@ function SignContainer(props) {
 
 	return (
 		<>
-			<div class={`container navSpace ${props.type} `}>
-				<div class="signContainer">{props.children}</div>
+			<div className={`container navSpace ${props.type} `}>
+				<div className="signContainer">{props.children}</div>
 			</div>
 		</>
 	);

@@ -1,8 +1,8 @@
 function Member() {
 	return (
 		<>
-			<div class="memberSettingsTableContainer">
-				<table class="memberSettingsTable">
+			<div className="memberSettingsTableContainer">
+				<table className="memberSettingsTable">
 					<tr>
 						<th>Name</th>
 						<th>Role</th>
@@ -12,7 +12,7 @@ function Member() {
 						<td>-</td>
 						<td>-</td>
 						<td>-</td>
-						<td class="moreOption">
+						<td className="moreOption">
 							<img src="./img/icon/more.png" alt="more" />
 						</td>
 					</tr>
@@ -20,19 +20,19 @@ function Member() {
 						<td>-</td>
 						<td>-</td>
 						<td>-</td>
-						<td class="moreOption">
+						<td className="moreOption">
 							<img src="./img/icon/more.png" alt="more" />
 						</td>
 					</tr>
 				</table>
 			</div>
 
-			<div class="pageNav">
-				<button class="pageNavbtn previousbtn btn">
+			<div className="pageNav">
+				<button className="pageNavbtn previousbtn btn">
 					<a href="/">&#8249;</a>
 				</button>
 				<p>1/1</p>
-				<button class="pageNavbtn nextbtn btn">
+				<button className="pageNavbtn nextbtn btn">
 					<a href="/">&#8250;</a>
 				</button>
 			</div>

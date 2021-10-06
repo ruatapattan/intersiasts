@@ -1,19 +1,21 @@
+import { Link } from "react-router-dom";
+
 function SideBarLChat() {
 	return (
 		<>
-			<div class="sidebar left">
-				<div class="sidebarContent">
-					<p class="textCenter serverName">Broskis (4)</p>
-					<p class="textCenter">Channels</p>
-					<a href="/" class="server here">
+			<div className="sidebar left">
+				<div className="sidebarContent">
+					<p className="textCenter serverName">Broskis (4)</p>
+					<p className="textCenter">Channels</p>
+					<Link to="/" className="server here">
 						General
-					</a>
-					<a href="/" class="server">
+					</Link>
+					<Link to="/" className="server">
 						Gaming
-					</a>
-					<a href="/" class="server">
+					</Link>
+					<Link to="/" className="server">
 						Do not disturb (srsly)
-					</a>
+					</Link>
 				</div>
 			</div>
 		</>

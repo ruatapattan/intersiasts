@@ -4,13 +4,13 @@ import General from "./General";
 
 function SettingsContainer(props) {
 	return (
-		<div class="center communitySettingsCenter">
-			<div class="centerContent communitySettingsCenterContent">
-				<div class="settingCategory">
-					<Link to="/" class="here">
+		<div className="center communitySettingsCenter">
+			<div className="centerContent communitySettingsCenterContent">
+				<div className="settingCategory">
+					<Link to="/" className="here">
 						General
 					</Link>
-					<Link to="./communitySettingsMember.html" class="">
+					<Link to="./communitySettingsMember.html" className="">
 						Member
 					</Link>
 				</div>

@@ -1,18 +1,19 @@
+import ThreadList from "../components/community/ThreadList";
 import ExpSlide from "../components/ExpSlide";
 import CommunitySideBar from "../components/sidebars/CommunitySideBar";
 function Community() {
 	return (
 		<>
 			<section>
-				<div class="container compartment navSpace">
+				<div className="container compartment navSpace">
 					<CommunitySideBar />
 
-					<div class="center w70">
-						<div class="centerContent">
+					<div className="center w70">
+						<div className="centerContent">
 							{/* <!-- event table --> */}
-							<div class="eventTableContainer">
+							<div className="eventTableContainer">
 								<p>Event Schedule</p>
-								<table class="eventTable">
+								<table className="eventTable">
 									<tr>
 										<th>Date</th>
 										<th>Time</th>
@@ -25,9 +26,11 @@ function Community() {
 									</tr>
 								</table>
 							</div>
-
+							<br />
 							{/* recent memories */}
 							<ExpSlide />
+
+							<ThreadList />
 						</div>
 					</div>
 				</div>

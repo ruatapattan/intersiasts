@@ -1,17 +1,17 @@
 function Chat() {
 	return (
 		<>
-			<div class="chatContainer">
+			<div className="chatContainer">
 				<header>
-					<div class="container header">
-						<div class="logo head">
-							<img src="./img/logo.png" alt="logo" class="logoimg" />
+					<div className="container header">
+						<div className="logo head">
+							<img src="./img/logo.png" alt="logo" className="logoimg" />
 						</div>
-						<div class="searchBar head">
-							<input type="text" placeholder="Search.." name="search" class="textInput" />
-							<button class="btn srchbtn">Search</button>
+						<div className="searchBar head">
+							<input type="text" placeholder="Search.." name="search" className="textInput" />
+							<button className="btn srchbtn">Search</button>
 						</div>
-						<ul class="navbar head">
+						<ul className="navbar head">
 							<li>
 								<a href="./index.html">Home</a>
 							</li>
@@ -21,7 +21,7 @@ function Chat() {
 							<li>
 								<a href="create.html">Create</a>
 							</li>
-							<li class="userPic">
+							<li className="userPic">
 								<a href="./profile.html">
 									<img src="./img/pfpic.png" alt="" />
 								</a>
@@ -31,48 +31,48 @@ function Chat() {
 				</header>
 
 				<section>
-					<div class="container compartment threePiecesChat">
-						<div class="sidebar left">
-							<div class="sidebarContent">
-								<p class="textCenter serverName">Broskis (4)</p>
-								<p class="textCenter">Channels</p>
-								<a href="/" class="server here">
+					<div className="container compartment threePiecesChat">
+						<div className="sidebar left">
+							<div className="sidebarContent">
+								<p className="textCenter serverName">Broskis (4)</p>
+								<p className="textCenter">Channels</p>
+								<a href="/" className="server here">
 									General
 								</a>
-								<a href="/" class="server">
+								<a href="/" className="server">
 									Gaming
 								</a>
-								<a href="/" class="server">
+								<a href="/" className="server">
 									Do not disturb (srsly)
 								</a>
 							</div>
 						</div>
 
-						<div class="center">
-							<div class="centerContent"></div>
+						<div className="center">
+							<div className="centerContent"></div>
 						</div>
 
-						<div class="sidebar right">
-							<div class="sidebarContent friendList">
-								<p class="textCenter">Friends</p>
-								<div class="friend">
-									<div class="userPic">
+						<div className="sidebar right">
+							<div className="sidebarContent friendList">
+								<p className="textCenter">Friends</p>
+								<div className="friend">
+									<div className="userPic">
 										<a href="/">
 											<img src="./img/pepe.png" alt="" />
 										</a>
 									</div>
 									<p>P€P€</p>
 								</div>
-								<div class="friend">
-									<div class="userPic">
+								<div className="friend">
+									<div className="userPic">
 										<a href="/">
 											<img src="./img/alexd.jpg" alt="" />
 										</a>
 									</div>
 									<p>AleXD</p>
 								</div>
-								<div class="friend">
-									<div class="userPic">
+								<div className="friend">
+									<div className="userPic">
 										<a href="/">
 											<img src="./img/sprout.jpg" alt="" />
 										</a>
@@ -81,10 +81,10 @@ function Chat() {
 								</div>
 							</div>
 
-							<div class="sidebarContent groupList">
-								<p class="textCenter">Groups</p>
-								<div class="group">
-									<div class="userPic">
+							<div className="sidebarContent groupList">
+								<p className="textCenter">Groups</p>
+								<div className="group">
+									<div className="userPic">
 										<a href="./chat.html">
 											<img src="./img/groupPic.jpg" alt="" />
 										</a>
@@ -96,9 +96,9 @@ function Chat() {
 					</div>
 				</section>
 
-				<div class="textInputContainer container">
-					<div class="userBar">
-						<div class="userPic userPicChat">
+				<div className="textInputContainer container">
+					<div className="userBar">
+						<div className="userPic userPicChat">
 							<a href="/">
 								<img src="./img/pfpic.png" alt="" />
 							</a>
@@ -106,12 +106,12 @@ function Chat() {
 						<p>xxxNoobMaster69xxx</p>
 					</div>
 
-					<div class="textBar">
-						<input type="text" name="chatInputBar" class="chatInputBar" />
-						<button class="btn sendmsgbtn">Send</button>
+					<div className="textBar">
+						<input type="text" name="chatInputBar" className="chatInputBar" />
+						<button className="btn sendmsgbtn">Send</button>
 					</div>
 
-					<div class="rightBar"></div>
+					<div className="rightBar"></div>
 				</div>
 			</div>
 		</>

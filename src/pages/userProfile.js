@@ -3,20 +3,22 @@ import SideBarL from "../components/sidebars/SideBarL";
 import SideBarR from "../components/sidebars/SideBarR";
 // import PopupContainer from "../components/sidebars/PopupContainer";
 
+//check if user is the owner of this profile via useparam and compare with token id
+
 function userProfile() {
 	return (
 		<>
 			<section>
-				<div class="container compartment navSpace">
+				<div className="container compartment navSpace">
 					<SideBarL />
 
 					{/* <!-- For all popups --> */}
 					{/* will be mapped */}
 					{/* <PopupContainer /> */}
 
-					<div class="center">
-						<div class="centerContent">
-							<div class="picFrame">
+					<div className="center">
+						<div className="centerContent">
+							<div className="picFrame">
 								<img src="./img/pfpic.png" alt="" />
 							</div>
 							<p>xxxNoobMaster69xxx</p>
