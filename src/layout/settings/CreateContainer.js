@@ -6,7 +6,7 @@ function CreateContainer({ type }) {
 	const { createCommunity, createThread } = useContext(CreateContext);
 	// const context = useContext(CreateContext);
 
-	console.log("type: ", type);
+	// console.log("type: ", type);
 
 	return (
 		<div className="center communitySettingsCenter">

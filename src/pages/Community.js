@@ -1,12 +1,40 @@
 import ThreadList from "../components/community/ThreadList";
 import ExpSlide from "../components/ExpSlide";
 import CommunitySideBar from "../components/sidebars/CommunitySideBar";
+import axios from "../config/axios";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+
 function Community() {
+	// useContext
+	const [communityData, setCommunityData] = useState({});
+
+	// const { setCommunityData, communityData } = useContext(CommunityContext);
+
+	const params = useParams();
+	//useContext()
+	//useeffect => get Id from useparam {
+	// res = axios => fetch all threads
+	// set contextState
+	// }
+	useEffect(() => {
+		console.log("hello");
+		const fetch = async () => {
+			// console.log(params.id);
+			const fetchedThreads = await axios.get(`http://localhost:8080/community/${params.id}`);
+			// console.log(fetchedThreads.data);
+			setCommunityData({ ...fetchedThreads.data });
+		};
+		fetch();
+	}, []);
+
+	console.log("communityData: ", communityData);
+
 	return (
 		<>
 			<section>
 				<div className="container compartment navSpace">
-					<CommunitySideBar />
+					<CommunitySideBar communityData={communityData} staticCommunityId={params.id} />
 
 					<div className="center w70">
 						<div className="centerContent">
@@ -30,7 +58,7 @@ function Community() {
 							{/* recent memories */}
 							<ExpSlide />
 
-							<ThreadList />
+							<ThreadList communityData={communityData} />
 						</div>
 					</div>
 				</div>

@@ -2,6 +2,7 @@ import "./App.css";
 import { HeaderHereProvider } from "./contexts/HeaderHereContext";
 import RouteContainer from "./layout/RouteContainer";
 import { CreateContextProvider } from "./contexts/CreateContext";
+import { ThreadContextProvider } from "./contexts/ThreadContext";
 
 function App() {
 	// const { user } = useContext(AuthContext);
@@ -13,7 +14,9 @@ function App() {
 		<div className="">
 			<HeaderHereProvider>
 				<CreateContextProvider>
-					<RouteContainer />
+					<ThreadContextProvider>
+						<RouteContainer />
+					</ThreadContextProvider>
 				</CreateContextProvider>
 			</HeaderHereProvider>
 		</div>

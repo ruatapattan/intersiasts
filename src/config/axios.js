@@ -17,11 +17,11 @@ axios.interceptors.response.use(
 		return response;
 	},
 	(err) => {
-		// if (err.response && err.response.status === 401) {
-		// 	removeToken();
-		// 	window.location.reload();
-		// }
-		console.log(err);
+		if (err.response && err.response.status === 401) {
+			removeToken();
+			window.location.reload();
+		}
+		// console.log(err);
 		return Promise.reject(err);
 	}
 );

@@ -136,6 +136,15 @@ a {
 	color: white;
 }
 
+.iconNav {
+	display: flex;
+	align-items: center;
+}
+
+.iconNav svg {
+	display: flex;
+}
+
 /* ------------------------------------------------------------------------------------- */
 
 /* section1 : intro */
@@ -921,12 +930,12 @@ th {
 	margin: 0.1rem;
 }
 
-.confirmChanges {
+.resetChanges {
 	background-color: #7289da;
 	border-color: #2c2f33;
 }
 
-.resetChanges {
+.confirmChanges {
 	background-color: #418348;
 }
 

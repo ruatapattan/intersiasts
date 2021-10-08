@@ -5,11 +5,11 @@ function CommunitySettingsSideBar() {
 	const { showImage } = useContext(CreateContext);
 	console.dir(showImage);
 
-	let toShow;
+	let toShow = null;
 
 	if (showImage) {
 		toShow = URL.createObjectURL(showImage);
-	}
+	} else toShow = null;
 
 	return (
 		<div className="sidebar left communitySettingsSideBar">

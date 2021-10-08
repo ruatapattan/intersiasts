@@ -1,6 +1,6 @@
 import ThreadItem from "./ThreadItem";
 
-function ThreadList() {
+function ThreadList({ communityData }) {
 	return (
 		<div
 			style={{
@@ -10,15 +10,11 @@ function ThreadList() {
 			}}
 		>
 			<div>Threads</div>
-			<ThreadItem />
-			<ThreadItem />
-			<ThreadItem />
-			<ThreadItem />
-			<ThreadItem />
-			<ThreadItem />
-			<ThreadItem />
-			<ThreadItem />
-			<ThreadItem />
+
+			{/* //map threads after useEffect took effect */}
+			{communityData?.threads?.map((item) => (
+				<ThreadItem threadData={item} />
+			))}
 		</div>
 	);
 }

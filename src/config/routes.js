@@ -14,7 +14,7 @@ const allPages = [
 	{ path: "/browse", component: Browse },
 	{ path: "/chat/:id", component: Chat },
 	{ path: "/community/:id", component: Community },
-	{ path: "/community/:id/thread/:id", component: Thread },
+	{ path: "/community/:communityId/thread/:threadId", component: Thread },
 	{ path: "/community/:id/create", component: CreateThread },
 	{ path: "/community/:id/settings/", component: CommunityGSettings },
 	{ path: "/createCommunity", component: CreateCommunity },

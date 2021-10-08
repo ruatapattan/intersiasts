@@ -1,6 +1,6 @@
 import CommentItem from "./CommentItem";
 
-function ReplyContainer() {
+function ReplyContainer({ threadData, threadReply }) {
 	return (
 		<>
 			<div
@@ -16,7 +16,9 @@ function ReplyContainer() {
 					marginBottom: "0.25rem",
 				}}
 			>
-				<CommentItem />
+				{threadReply.ReplyReplies.map((item) => (
+					<CommentItem noMore={"yes"} threadData={threadData} threadReply={item} />
+				))}
 			</div>
 		</>
 	);

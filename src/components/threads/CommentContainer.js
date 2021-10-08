@@ -1,7 +1,13 @@
+import { useState } from "react";
 import CommentItem from "./CommentItem";
 import ReplyContainer from "./ReplyContainer";
+import ThreadReplyForm from "./ThreadReplyForm";
 
-function CommentContainer() {
+function CommentContainer({ threadData, threadReply }) {
+	const [isCommenting, setIsCommenting] = useState(false);
+
+	console.log(threadData);
+
 	return (
 		<>
 			<div
@@ -14,10 +20,13 @@ function CommentContainer() {
 					marginBottom: "0.25rem",
 				}}
 			>
-				<CommentItem />
+				<CommentItem setIsCommenting={setIsCommenting} threadData={threadData} threadReply={threadReply} />
 			</div>
+			{isCommenting && <ThreadReplyForm />}
+
+			{/* reply of reply */}
 			<div className="repliesContainer" style={{ display: "flex", justifyContent: "end" }}>
-				<ReplyContainer />
+				<ReplyContainer threadData={threadData} threadReply={threadReply} />
 			</div>
 		</>
 	);
