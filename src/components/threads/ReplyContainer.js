@@ -29,7 +29,7 @@ function ReplyContainer({ threadData, threadReply }) {
 				}}
 			>
 				{/* {sortedReplyReplies?.map((item) => ( */}
-				<CommentItem noMore={"yes"} threadData={threadData} threadReply={threadReply} />
+				<CommentItem noMore={"yes"} threadData={threadData} threadReply={threadReply} type="replyReply" />
 				{/* ))} */}
 			</div>
 		</>

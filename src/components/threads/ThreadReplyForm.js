@@ -29,13 +29,12 @@ function ThreadReplyForm({ threadId, replierId, commentType }) {
 	const handleSubmitCommentReply = async (e) => {
 		// threaReplyId is passed as threadId for a replyReply
 		e.preventDefault();
-		const result = await axios.post(`http://localhost:8080/reply/${threadId}/replyReply/create`, {
+		await axios.post(`http://localhost:8080/reply/${threadId}/replyReply/create`, {
 			content: commentInput,
 			threadReplyId: threadId,
 			replierId: replierId,
 		});
-
-		console.log(result);
+		window.location.reload();
 	};
 
 	return (
