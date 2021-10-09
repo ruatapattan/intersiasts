@@ -135,6 +135,7 @@ function CommentItem({ noMore, threadData, threadReply, type }) {
 						fontSize: "0.8rem",
 						display: "flex",
 						alignItems: "center",
+						cursor: "pointer",
 					}}
 				>
 					<div style={{ display: "flex", alignItems: "center" }}>
