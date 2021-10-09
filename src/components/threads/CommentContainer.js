@@ -4,9 +4,22 @@ import ReplyContainer from "./ReplyContainer";
 import ThreadReplyForm from "./ThreadReplyForm";
 
 function CommentContainer({ threadData, threadReply }) {
-	const [isCommenting, setIsCommenting] = useState(false);
+	// console.log(threadData);
 
-	console.log(threadData);
+	function sortReplies(a, b) {
+		let keyA = new Date(a.createdAt),
+			keyB = new Date(b.createdAt);
+		// Compare the 2 dates
+		if (keyA < keyB) return -1;
+		if (keyA > keyB) return 1;
+		return 0;
+	}
+
+	//sorted now
+	const sortedReplyReplies = threadReply?.ReplyReplies?.sort(sortReplies);
+
+	// console.log("threadReply", threadReply);
+	// console.log("sortedReplyReplies", threadReply.ReplyReplies);
 
 	return (
 		<>
@@ -20,13 +33,22 @@ function CommentContainer({ threadData, threadReply }) {
 					marginBottom: "0.25rem",
 				}}
 			>
-				<CommentItem setIsCommenting={setIsCommenting} threadData={threadData} threadReply={threadReply} />
+				<CommentItem threadData={threadData} threadReply={threadReply} />
 			</div>
-			{isCommenting && <ThreadReplyForm />}
 
 			{/* reply of reply */}
-			<div className="repliesContainer" style={{ display: "flex", justifyContent: "end" }}>
+			{/* <div className="repliesContainer" style={{ display: "flex", justifyContent: "end" }}>
 				<ReplyContainer threadData={threadData} threadReply={threadReply} />
+			</div> */}
+			{/* revised */}
+			<div className="repliesContainer" style={{ display: "flex", alignItems: "end", flexDirection: "column" }}>
+				{sortedReplyReplies?.map((item) => (
+					<ReplyContainer
+						threadData={threadData}
+						threadReply={item}
+						style={{ display: "flex", justifyContent: "end" }}
+					/>
+				))}
 			</div>
 		</>
 	);

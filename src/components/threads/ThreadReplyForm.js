@@ -2,11 +2,13 @@ import axios from "axios";
 import { useState } from "react";
 // import { useHistory } from "react-router-dom";
 
-function ThreadReplyForm({ threadId, replierId }) {
+function ThreadReplyForm({ threadId, replierId, commentType }) {
 	const [commentInput, setCommentInput] = useState("");
-	console.log(threadId, replierId);
+	// console.log(threadId, replierId);
 
-	console.log("input", commentInput);
+	// console.log("commentType", commentType);
+
+	console.log("id: ", threadId);
 
 	const handleSubmitComment = async (e) => {
 		try {
@@ -22,6 +24,18 @@ function ThreadReplyForm({ threadId, replierId }) {
 		} catch (err) {
 			console.log(err);
 		}
+	};
+
+	const handleSubmitCommentReply = async (e) => {
+		// threaReplyId is passed as threadId for a replyReply
+		e.preventDefault();
+		const result = await axios.post(`http://localhost:8080/reply/${threadId}/replyReply/create`, {
+			content: commentInput,
+			threadReplyId: threadId,
+			replierId: replierId,
+		});
+
+		console.log(result);
 	};
 
 	return (
@@ -40,7 +54,7 @@ function ThreadReplyForm({ threadId, replierId }) {
 				<p style={{ color: "white", textAlign: "left" }}>Comment</p>
 			</div>
 			<form
-				onSubmit={handleSubmitComment}
+				onSubmit={commentType === "replyReply" ? handleSubmitCommentReply : handleSubmitComment}
 				className="replyFormContainer"
 				style={{
 					width: "100%",

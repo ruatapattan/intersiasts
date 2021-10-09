@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { HandThumbsUp, Reply } from "react-bootstrap-icons";
 import { createdAgo } from "../../services/getTimeService";
 import ThreadReplyForm from "./ThreadReplyForm";
-
+import { AuthContext } from "../../contexts/AuthContext";
+import { PencilSquare } from "react-bootstrap-icons";
+import { isOwner } from "../../services/isOwnerService";
 const INITIAL_DATA = {
 	title: "Lorem ipsum, dolor sit amet consectetur adipisicing",
 	content:
@@ -12,8 +14,12 @@ const INITIAL_DATA = {
 function CommentItem({ noMore, threadData, threadReply }) {
 	const [isCommenting, setIsCommenting] = useState(false);
 	const { community, poster, thread, threadLikes } = threadData;
+	const { user } = useContext(AuthContext);
+	// console.log("here2", threadReply.content);
 
-	console.log("here2", threadReply);
+	// const [commentType, setCommentType] = useState(type);
+
+	// console.log("typeb4", commentType);
 
 	return (
 		<>
@@ -52,7 +58,7 @@ function CommentItem({ noMore, threadData, threadReply }) {
 					}}
 				>
 					<div style={{ display: "flex", alignItems: "center" }}>
-						<span style={{ margin: "0.25rem" }}>{threadReply.ThreadLikes.length}</span>
+						<span style={{ margin: "0.25rem" }}>{threadReply?.ThreadLikes?.length}</span>
 						<HandThumbsUp />
 					</div>
 					{noMore !== "yes" && (
@@ -61,15 +67,25 @@ function CommentItem({ noMore, threadData, threadReply }) {
 								style={{ margin: "0.25rem", cursor: "pointer" }}
 								onClick={() => setIsCommenting((cur) => !cur)}
 							>
-								{threadReply.ReplyReplies.length} Comment
+								{threadReply?.ReplyReplies.length} Comment
 							</span>
 							<Reply />
+						</div>
+					)}
+					{isOwner(user.id, threadReply?.replierId) && (
+						<div style={{ display: "flex", alignItems: "center" }}>
+							<span style={{ margin: "0.25rem" }}>Edit</span>
+							<PencilSquare />
 						</div>
 					)}
 				</div>
 			</div>
 			{noMore !== "yes" && isCommenting && (
-				<ThreadReplyForm threadId={threadReply.id} replierId={threadReply.replierId} />
+				<ThreadReplyForm
+					threadId={threadReply?.id}
+					replierId={threadReply?.replierId}
+					commentType={"replyReply"}
+				/>
 			)}
 		</>
 	);

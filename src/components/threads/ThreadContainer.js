@@ -5,7 +5,7 @@ import ThreadReplyForm from "./ThreadReplyForm";
 const arr = ["a", "b"];
 
 function ThreadContainer({ threadData }) {
-	console.log("here", threadData);
+	// console.log("here", threadData);
 
 	function sortReplies(a, b) {
 		let keyA = new Date(a.createdAt),
@@ -17,9 +17,7 @@ function ThreadContainer({ threadData }) {
 	}
 
 	//sorted now
-	const newarr = threadData?.threadReplies?.sort(sortReplies);
-
-	console.log("newarr :", newarr);
+	const sortedThreadReplies = threadData?.threadReplies?.sort(sortReplies);
 
 	return (
 		<section className="navSpace center w70" style={{ display: "flex", justifyContent: "center" }}>
@@ -56,7 +54,7 @@ function ThreadContainer({ threadData }) {
 				}); */}
 
 				{/* comments */}
-				{threadData?.threadReplies?.map((item) => (
+				{sortedThreadReplies?.map((item) => (
 					<CommentContainer threadData={threadData} threadReply={item} />
 				))}
 			</div>

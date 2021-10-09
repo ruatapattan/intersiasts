@@ -1,6 +1,18 @@
 import CommentItem from "./CommentItem";
 
 function ReplyContainer({ threadData, threadReply }) {
+	// function sortReplies(a, b) {
+	// 	let keyA = new Date(a.createdAt),
+	// 		keyB = new Date(b.createdAt);
+	// 	// Compare the 2 dates
+	// 	if (keyA < keyB) return -1;
+	// 	if (keyA > keyB) return 1;
+	// 	return 0;
+	// }
+
+	//sorted now
+	// const sortedReplyReplies = threadReply?.ReplyReplies?.sort(sortReplies);
+
 	return (
 		<>
 			<div
@@ -16,9 +28,9 @@ function ReplyContainer({ threadData, threadReply }) {
 					marginBottom: "0.25rem",
 				}}
 			>
-				{threadReply.ReplyReplies.map((item) => (
-					<CommentItem noMore={"yes"} threadData={threadData} threadReply={item} />
-				))}
+				{/* {sortedReplyReplies?.map((item) => ( */}
+				<CommentItem noMore={"yes"} threadData={threadData} threadReply={threadReply} />
+				{/* ))} */}
 			</div>
 		</>
 	);

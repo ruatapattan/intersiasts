@@ -21,7 +21,7 @@ function Thread() {
 		fetch();
 	}, []);
 
-	console.log(communityData);
+	// console.log(communityData);
 
 	return (
 		<>

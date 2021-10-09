@@ -1,5 +1,9 @@
-import { HandThumbsUp, ChatLeft } from "react-bootstrap-icons";
+import { useContext } from "react";
+import { HandThumbsUp, ChatLeft, PencilSquare } from "react-bootstrap-icons";
+import { AuthContext } from "../../contexts/AuthContext";
 import { createdAgo } from "../../services/getTimeService";
+import { isOwner } from "../../services/isOwnerService";
+
 const INITIAL_DATA = {
 	title: "Lorem ipsum, dolor sit amet consectetur adipisicing",
 	content:
@@ -8,6 +12,7 @@ const INITIAL_DATA = {
 
 function ThreadContentItem({ threadData }) {
 	const { community, poster, thread, threadLikes, threadReplies } = threadData;
+	const { user } = useContext(AuthContext);
 
 	return (
 		<>
@@ -54,6 +59,12 @@ function ThreadContentItem({ threadData }) {
 						<span style={{ margin: "0.25rem" }}>{`${threadReplies?.length} comments`}</span>
 						<ChatLeft />
 					</div>
+					{isOwner(user.id, poster?.id) && (
+						<div style={{ display: "flex", alignItems: "center" }}>
+							<span style={{ margin: "0.25rem" }}>Edit</span>
+							<PencilSquare />
+						</div>
+					)}
 				</div>
 			</div>
 		</>
