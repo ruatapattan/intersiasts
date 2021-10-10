@@ -8,7 +8,7 @@ function ThreadReplyForm({ threadId, replierId, commentType }) {
 
 	// console.log("commentType", commentType);
 
-	console.log("id: ", threadId);
+	// console.log("id: ", threadId);
 
 	const handleSubmitComment = async (e) => {
 		try {

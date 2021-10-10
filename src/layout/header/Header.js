@@ -10,7 +10,7 @@ function Header() {
 	const history = useHistory();
 	const { here } = useHeaderHere();
 	const { userRole, user, setUser, setUserRole } = useContext(AuthContext);
-	console.log(user);
+	// console.log(user);
 
 	const [clickedProfile, setClickedProfile] = useState(false);
 

@@ -44,6 +44,7 @@ function CommentContainer({ threadData, threadReply }) {
 			<div className="repliesContainer" style={{ display: "flex", alignItems: "end", flexDirection: "column" }}>
 				{sortedReplyReplies?.map((item) => (
 					<ReplyContainer
+						key={item.id}
 						threadData={threadData}
 						threadReply={item}
 						style={{ display: "flex", justifyContent: "end" }}

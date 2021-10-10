@@ -1,9 +1,13 @@
 import { useContext, useRef, useEffect, useState } from "react";
-import { HandThumbsUp, ChatLeft, PencilSquare } from "react-bootstrap-icons";
+import { HandThumbsUp, ChatLeft, PencilSquare, Trash, HandThumbsUpFill } from "react-bootstrap-icons";
 import { AuthContext } from "../../contexts/AuthContext";
 import { createdAgo } from "../../services/getTimeService";
 import { isOwner } from "../../services/isOwnerService";
 import axios from "../../config/axios";
+import { useHistory } from "react-router-dom";
+
+import Swal from "sweetalert2";
+
 const INITIAL_DATA = {
 	title: "Lorem ipsum, dolor sit amet consectetur adipisicing",
 	content:
@@ -16,10 +20,15 @@ function ThreadContentItem({ threadData }) {
 	const [isEditing, setIsEditing] = useState(false);
 	const [scrollHeight, setScrollHeight] = useState(0);
 	const [editInput, setEditInput] = useState("");
+	const [liked, setliked] = useState(false);
+	const history = useHistory();
 	const ref = useRef();
 
-	console.log("thread:", thread?.content);
-	console.log("thread state:", editInput);
+	// console.log("thread:", thread?.content);
+	// console.log("thread state:", editInput);
+	// console.log("thread: ", thread);
+	// console.log("threadLike: ", threadData.threadLikes);
+	// console.log("threadReply: ", threadData.threadReplies);
 
 	useEffect(() => {
 		// console.log("myContainer..", ref.current);
@@ -30,6 +39,63 @@ function ThreadContentItem({ threadData }) {
 		setEditInput(thread?.content);
 	}, [thread]);
 
+	useEffect(() => {
+		// if (threadLikes?.length > 0) {
+		// console.log(threadLikes);
+		const result = threadLikes?.filter((item) => item.likerId === user.id);
+		if (result?.length > 0) {
+			setliked(true);
+		}
+		// }
+	}, [threadLikes]);
+
+	// const r1 = threadLikes?.length > 0 ? threadLikes.map((item) => item.likerId) : [];
+	// console.log(r1);
+
+	// r1?.forEach((item) => console.log(item === user.id));
+	// const result = r1?.includes(user.id);
+
+	// console.log(result);
+
+	//delete whole thread
+	const handleClickDel = async () => {
+		if (thread) {
+			const deleted = axios.delete(`http://localhost:8080/thread/${thread.id}/delete`);
+		}
+
+		// const result = await Swal.fire({
+		// 	title: "Are you sure?",
+		// 	text: "You won't be able to revert this!",
+		// 	icon: "warning",
+		// 	showCancelButton: true,
+		// 	confirmButtonColor: "#3085d6",
+		// 	cancelButtonColor: "#d33",
+		// 	confirmButtonText: "Yes, delete it!",
+		// 	background: "#23272a",
+		// 	customClass: {
+		// 		htmlContainer: "whiteText",
+		// 		title: "whiteText",
+		// 	},
+		// });
+		// if (result.isConfirmed) {
+		// 	const deleted = axios.delete(`http://localhost:8080/thread/${thread.id}/delete`);
+
+		// 	const done = await Swal.fire({
+		// 		icon: "success",
+		// 		title: "Deleted!",
+		// 		text: "Your file has been deleted.",
+		// 		background: "#23272a",
+		// 		customClass: {
+		// 			htmlContainer: "whiteText",
+		// 			title: "whiteText",
+		// 		},
+		// 	});
+
+		// 	// done.isConfirmed === true
+		// 	// history.push(`/community/${community.id}`);
+		// }
+	};
+
 	const handleClickCancelEdit = () => {
 		setEditInput(thread?.content);
 		setIsEditing(false);
@@ -39,9 +105,21 @@ function ThreadContentItem({ threadData }) {
 		e.preventDefault();
 		// send content, threadId
 
-		await axios.put(`http://localhost:8080/thread/${thread.id}/edit`, { content: editInput });
-		// window.location.reload();
+		await axios.put(`http://localhost:8080/thread/${thread.id}/edit`, { content: editInput.content });
+
+		window.location.reload();
 	};
+
+	const handleClickLike = async () => {
+		await axios.post(`http://localhost:8080/thread/${thread.id}/like`);
+		setliked((cur) => !cur);
+	};
+	const handleClickUnLike = async () => {
+		await axios.delete(`http://localhost:8080/thread/${thread.id}/unLike`);
+		setliked((cur) => !cur);
+	};
+
+	console.log("-------------------------------");
 
 	return (
 		<>
@@ -82,7 +160,7 @@ function ThreadContentItem({ threadData }) {
 					<form onSubmit={handleSubmitEditThread}>
 						<textarea
 							ref={ref}
-							value={editInput}
+							value={editInput.content}
 							style={{
 								width: "100%",
 								boxSizing: "border-box",
@@ -94,7 +172,7 @@ function ThreadContentItem({ threadData }) {
 								overflowY: "auto",
 								borderRadius: "10px",
 							}}
-							onChange={(e) => setEditInput(e.target.value)}
+							onChange={(e) => setEditInput((cur) => ({ ...cur, content: e.target.value }))}
 						/>
 						<div
 							className="buttonContainer"
@@ -110,26 +188,65 @@ function ThreadContentItem({ threadData }) {
 					</form>
 				)}
 
-				<div
-					className="threadInfo"
-					style={{ display: "flex", justifyContent: "end", fontSize: "0.8rem", cursor: "pointer" }}
-				>
-					<div style={{ display: "flex", alignItems: "center" }}>
+				<div className="threadInfo" style={{ display: "flex", justifyContent: "end", fontSize: "0.8rem" }}>
+					<div
+						style={{
+							display: "flex",
+							alignItems: "center",
+							cursor: "pointer",
+							marginLeft: "0.25rem",
+							marginRight: "0.25rem",
+						}}
+						onClick={handleClickLike}
+					>
 						<span style={{ margin: "0.25rem" }}>{threadLikes?.length}</span>
-						<HandThumbsUp />
+						{!liked ? (
+							<HandThumbsUp onClick={handleClickLike} />
+						) : (
+							<HandThumbsUpFill style={{ color: "slateblue" }} />
+						)}
 					</div>
-					<div style={{ display: "flex", alignItems: "center" }}>
+					<div
+						style={{
+							display: "flex",
+							alignItems: "center",
+							cursor: "pointer",
+							marginLeft: "0.25rem",
+							marginRight: "0.25rem",
+						}}
+					>
 						<span style={{ margin: "0.25rem" }}>{`${threadReplies?.length} comments`}</span>
 						<ChatLeft />
 					</div>
 					{isOwner(user.id, poster?.id) && (
-						<div
-							style={{ display: "flex", alignItems: "center" }}
-							onClick={(e) => setIsEditing((cur) => !cur)}
-						>
-							<span style={{ margin: "0.25rem" }}>Edit</span>
-							<PencilSquare />
-						</div>
+						<>
+							<div
+								style={{
+									display: "flex",
+									alignItems: "center",
+									cursor: "pointer",
+									marginLeft: "0.25rem",
+									marginRight: "0.25rem",
+								}}
+								onClick={(e) => setIsEditing((cur) => !cur)}
+							>
+								<span style={{ margin: "0.25rem" }}>Edit</span>
+								<PencilSquare />
+							</div>
+							<div
+								style={{
+									display: "flex",
+									alignItems: "center",
+									cursor: "pointer",
+									marginLeft: "0.25rem",
+									marginRight: "0.25rem",
+								}}
+								onClick={handleClickDel}
+							>
+								<span style={{ margin: "0.25rem" }}>Delete</span>
+								<Trash />
+							</div>
+						</>
 					)}
 				</div>
 			</div>

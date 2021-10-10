@@ -1458,3 +1458,7 @@ th {
 	color: red;
 	margin: 0;
 }
+
+.whiteText {
+	color: white !important;
+}

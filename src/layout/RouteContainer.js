@@ -7,11 +7,11 @@ import routes from "../config/routes";
 
 function RouteContainer() {
 	const { userRole } = useContext(AuthContext);
-	console.log(`userRole: `, userRole);
+	// console.log(`userRole: `, userRole);
 
 	const role = userRole;
 
-	console.log(routes[role]);
+	// console.log(routes[role]);
 
 	return (
 		<>

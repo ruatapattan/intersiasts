@@ -9,19 +9,21 @@ import { ThreadContext } from "../contexts/ThreadContext";
 
 function Thread() {
 	const params = useParams();
-	// const { setCommunityData, communityData } = useContext(CommunityContext);
+	const { threadContextData, setThreadContextData } = useContext(ThreadContext);
 	const [communityData, setCommunityData] = useState({});
 
 	useEffect(() => {
-		console.log("hello");
+		// console.log("hello");
 		const fetch = async () => {
 			const fetchedThreads = await axios.get(`http://localhost:8080/thread/${params.threadId}`);
 			setCommunityData({ ...fetchedThreads.data });
+			setThreadContextData({ ...fetchedThreads.data });
 		};
+
 		fetch();
 	}, []);
 
-	// console.log(communityData);
+	// console.log(threadContextData);
 
 	return (
 		<>

@@ -2,11 +2,13 @@ import { createContext, useEffect, useState } from "react";
 
 const ThreadContext = createContext();
 function ThreadContextProvider(props) {
-	const [threadData, setThreadData] = useState({});
+	const [threadContextData, setThreadContextData] = useState({});
 
 	return (
 		<>
-			<ThreadContext.Provider value={{ setThreadData, threadData }}>{props.children}</ThreadContext.Provider>
+			<ThreadContext.Provider value={{ setThreadContextData, threadContextData }}>
+				{props.children}
+			</ThreadContext.Provider>
 		</>
 	);
 }
