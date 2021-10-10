@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { HandThumbsUp, Reply } from "react-bootstrap-icons";
+import { HandThumbsUp, HandThumbsUpFill, Reply } from "react-bootstrap-icons";
 import { createdAgo } from "../../services/getTimeService";
 import ThreadReplyForm from "./ThreadReplyForm";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -12,13 +12,15 @@ const INITIAL_DATA = {
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, corrupti nemo quisquam debitis magni voluptatibus nisi ut quo alias! Vitae neque aliquid debitis voluptates labore consequuntur nemo quam. Quod exercitationem fugit dolores magni quisquam officiis modi esse praesentium asperiores dolorem repellendus tempora, nulla quos vitae eius velit rem voluptas dolorum nisi veritatis voluptate laudantium quo. Cumque quibusdam velit id eligendi voluptatem, sint exercitationem eveniet maiores iste numquam consectetur odit minus esse perferendis? Modi, quae et? Deleniti sint enim tenetur dolor inventore corrupti ex odio pariatur?",
 };
 
-function CommentItem({ noMore, threadData, threadReply, type }) {
+function CommentItem({ noMore, threadData, threadReply, type = "threadReply" }) {
 	const [isCommenting, setIsCommenting] = useState(false);
 	const [isEditing, setIsEditing] = useState(false);
 	const { community, poster, thread, threadLikes } = threadData;
 	const { user } = useContext(AuthContext);
 	const [scrollHeight, setScrollHeight] = useState(0);
 	const [editInput, setEditInput] = useState(threadReply.content);
+	const [liked, setLiked] = useState(false);
+	const [likeCount, setLikeCount] = useState("");
 
 	const ref = useRef();
 
@@ -32,19 +34,23 @@ function CommentItem({ noMore, threadData, threadReply, type }) {
 		setScrollHeight(ref?.current?.scrollHeight);
 	}, [isEditing]);
 
-	// console.log("here2", threadReply.content);
+	console.log("here2", threadReply);
 
 	// const [commentType, setCommentType] = useState(type);
 
 	// console.log("typeb4", commentType);
 
-	// function numOfLines(textArea, lineHeight) {
-	// 	let h0 = textArea.style.height;
-	// 	ta.style.height = 'auto';
-	// 	let h1 = textArea.scrollHeight;
-	// 	textArea.style.height = h0;
-	// 	return Math.ceil(h1 / lineHeight);
-	// }
+	useEffect(() => {
+		const result = threadReply?.ThreadLikes?.filter((item) => item.likerId === user.id);
+		// console.log(result);
+		if (result?.length > 0) {
+			setLiked(true);
+		}
+		setLikeCount(threadReply?.ThreadLikes?.length);
+	}, [threadReply.threadLikes]);
+
+	// console.log(liked);
+	// console.log(likeCount);
 
 	const handleClickCancelEdit = () => {
 		setEditInput(threadReply.content);
@@ -66,6 +72,23 @@ function CommentItem({ noMore, threadData, threadReply, type }) {
 		// // send content, replyId
 		await axios.put(`http://localhost:8080/reply/replyReply/${threadReply.id}/edit`, { content: editInput });
 		window.location.reload();
+	};
+
+	//like handling
+	const handleClickLike = async () => {
+		await axios.post(`http://localhost:8080/thread/${type}/${threadReply.id}/like`, {
+			likerId: user.id,
+		});
+		setLiked((cur) => !cur);
+		setLikeCount((cur) => cur + 1);
+	};
+
+	const handleClickUnLike = async () => {
+		await axios.delete(`http://localhost:8080/thread/${type}/${threadReply.id}/unLike`, {
+			data: { data: user.id },
+		});
+		setLiked((cur) => !cur);
+		setLikeCount((cur) => cur - 1);
 	};
 
 	return (
@@ -139,8 +162,12 @@ function CommentItem({ noMore, threadData, threadReply, type }) {
 					}}
 				>
 					<div style={{ display: "flex", alignItems: "center" }}>
-						<span style={{ margin: "0.25rem" }}>{threadReply?.ThreadLikes?.length}</span>
-						<HandThumbsUp />
+						<span style={{ margin: "0.25rem" }}>{likeCount}</span>
+						{!liked ? (
+							<HandThumbsUp onClick={handleClickLike} />
+						) : (
+							<HandThumbsUpFill style={{ color: "slateblue" }} onClick={handleClickUnLike} />
+						)}
 					</div>
 					{noMore !== "yes" && (
 						<div style={{ display: "flex", alignItems: "center" }}>

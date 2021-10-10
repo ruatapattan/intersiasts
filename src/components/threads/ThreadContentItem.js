@@ -20,9 +20,12 @@ function ThreadContentItem({ threadData }) {
 	const [isEditing, setIsEditing] = useState(false);
 	const [scrollHeight, setScrollHeight] = useState(0);
 	const [editInput, setEditInput] = useState("");
-	const [liked, setliked] = useState(false);
+	const [likeCount, setLikeCount] = useState("");
+	const [liked, setLiked] = useState(false);
 	const history = useHistory();
 	const ref = useRef();
+
+	console.log(likeCount);
 
 	// console.log("thread:", thread?.content);
 	// console.log("thread state:", editInput);
@@ -44,8 +47,9 @@ function ThreadContentItem({ threadData }) {
 		// console.log(threadLikes);
 		const result = threadLikes?.filter((item) => item.likerId === user.id);
 		if (result?.length > 0) {
-			setliked(true);
+			setLiked(true);
 		}
+		setLikeCount(threadLikes?.length);
 		// }
 	}, [threadLikes]);
 
@@ -111,12 +115,21 @@ function ThreadContentItem({ threadData }) {
 	};
 
 	const handleClickLike = async () => {
-		await axios.post(`http://localhost:8080/thread/${thread.id}/like`);
-		setliked((cur) => !cur);
+		await axios.post(`http://localhost:8080/thread/${thread.id}/like`, {
+			likerId: user.id,
+		});
+		setLiked((cur) => !cur);
+		setLikeCount((cur) => cur + 1);
 	};
 	const handleClickUnLike = async () => {
-		await axios.delete(`http://localhost:8080/thread/${thread.id}/unLike`);
-		setliked((cur) => !cur);
+		await axios.delete(`http://localhost:8080/thread/${thread.id}/unLike/`, {
+			//in delete, payload can only be sent this way
+
+			data: { data: user.id },
+		});
+		setLiked((cur) => !cur);
+		// alert(likeCount);
+		setLikeCount((cur) => cur - 1);
 	};
 
 	console.log("-------------------------------");
@@ -197,13 +210,12 @@ function ThreadContentItem({ threadData }) {
 							marginLeft: "0.25rem",
 							marginRight: "0.25rem",
 						}}
-						onClick={handleClickLike}
 					>
-						<span style={{ margin: "0.25rem" }}>{threadLikes?.length}</span>
+						<span style={{ margin: "0.25rem" }}>{likeCount}</span>
 						{!liked ? (
 							<HandThumbsUp onClick={handleClickLike} />
 						) : (
-							<HandThumbsUpFill style={{ color: "slateblue" }} />
+							<HandThumbsUpFill style={{ color: "slateblue" }} onClick={handleClickUnLike} />
 						)}
 					</div>
 					<div
