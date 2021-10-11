@@ -96,7 +96,7 @@ function Header() {
 					</Link>
 					<Link
 						style={{ margin: "0.4rem" }}
-						to={`profile/${user.id}`}
+						to={`/profile/${user.id}`}
 						onClick={() => setClickedProfile((cur) => !cur)}
 					>
 						My Profile

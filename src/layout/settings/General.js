@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams, useHistory } from "react-router-dom";
+import Swal from "sweetalert2";
 import axios from "../../config/axios";
 
 function General({ community, tags, setShowImage }) {
+	const history = useHistory();
 	const params = useParams();
 	console.log(community);
 	const [tagList, setTagList] = useState(tags);
@@ -86,6 +88,51 @@ function General({ community, tags, setShowImage }) {
 		}
 	};
 
+	const handleClickDeleteCommunity = async (e) => {
+		e.preventDefault();
+
+		const result = await Swal.fire({
+			title: "Are you sure?",
+			text: "This will be gone forever!",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Yes, delete it!",
+			background: "#23272a",
+			customClass: {
+				htmlContainer: "whiteText",
+				title: "whiteText",
+			},
+		});
+		if (result.isConfirmed) {
+			const deletedCommunity = await axios.delete(`/community/${params.id}/delete`);
+			const done = await Swal.fire({
+				icon: "success",
+				title: "Deleted!",
+				text: "Your community has been deleted.",
+				background: "#23272a",
+				customClass: {
+					htmlContainer: "whiteText",
+					title: "whiteText",
+				},
+			});
+			alert("heyy");
+			done.isConfirmed && history.push(`/browse`);
+		} else {
+			Swal.fire({
+				icon: "error",
+				title: "Error!",
+				text: "An error occured, try again",
+				background: "#23272a",
+				customClass: {
+					htmlContainer: "whiteText",
+					title: "whiteText",
+				},
+			});
+		}
+	};
+
 	return (
 		<form action="" className="editFieldContainer" onSubmit={handleSubmitEdit}>
 			<div className="editCommunityName inputpair">
@@ -159,7 +206,12 @@ function General({ community, tags, setShowImage }) {
 			<div className="editbtnContainer" style={{ display: "flex", justifyContent: "space-around" }}>
 				<input type="submit" value="Confirm Changes" className="confirmChanges editbtn btn" />
 				{/* <input type="button" value="Reset Changes" className="resetChanges editbtn btn" /> */}
-				<input type="button" value="Delete Community" className="deleteCommunity editbtn btn" />
+				<input
+					type="button"
+					value="Delete Community"
+					className="deleteCommunity editbtn btn"
+					onClick={handleClickDeleteCommunity}
+				/>
 			</div>
 		</form>
 	);

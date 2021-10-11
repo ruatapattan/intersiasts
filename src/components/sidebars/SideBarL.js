@@ -2,18 +2,18 @@ import { Link } from "react-router-dom";
 
 function SideBarL() {
 	return (
-		<div className="sidebar left">
+		<div className="sidebar left" style={{ justifyContent: "space-around" }}>
 			<div className="sidebarContent">
-				<Link to="/" className="status">
+				<Link to="#" className="status">
 					Status: Online
 				</Link>
-				<Link to="/" className="profile here">
+				<Link to="#" className="profile here">
 					Profile
 				</Link>
-				<Link to="/" className="notification">
+				<Link to="#" className="notification">
 					Notifications
 				</Link>
-				<Link to="/" className="activities Log">
+				<Link to="#" className="activities Log">
 					Activities Log
 				</Link>
 				<Link to="./editProfile.html" className="editProfile">
@@ -22,12 +22,11 @@ function SideBarL() {
 				<br />
 			</div>
 
-			{/* <div className="plus">
-				<p>Try plus for 30 days!</p>
+			<div className="plus">
 				<div className="btn plusbtn">
-					<Link to="/">Go Plus</Link>
+					<Link to="#">Create Community</Link>
 				</div>
-			</div> */}
+			</div>
 		</div>
 	);
 }

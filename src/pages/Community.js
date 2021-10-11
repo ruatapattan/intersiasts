@@ -22,7 +22,6 @@ function Community() {
 		const fetch = async () => {
 			// console.log(params.id);
 			const fetchedThreads = await axios.get(`http://localhost:8080/community/${params.id}`);
-			// console.log(fetchedThreads.data);
 			setCommunityData({ ...fetchedThreads.data });
 		};
 		fetch();
@@ -34,33 +33,37 @@ function Community() {
 		<>
 			<section>
 				<div className="container compartment navSpace">
-					<CommunitySideBar communityData={communityData} staticCommunityId={params.id} />
+					{Object.keys(communityData).length > 0 && (
+						<>
+							<CommunitySideBar communityData={communityData} staticCommunityId={params.id} />
 
-					<div className="center w70">
-						<div className="centerContent">
-							{/* <!-- event table --> */}
-							<div className="eventTableContainer">
-								<p>Event Schedule</p>
-								<table className="eventTable">
-									<tr>
-										<th>Date</th>
-										<th>Time</th>
-										<th>Event</th>
-									</tr>
-									<tr>
-										<td>-</td>
-										<td>-</td>
-										<td>-</td>
-									</tr>
-								</table>
+							<div className="center w70">
+								<div className="centerContent">
+									{/* <!-- event table --> */}
+									<div className="eventTableContainer">
+										<p>Event Schedule</p>
+										<table className="eventTable">
+											<tr>
+												<th>Date</th>
+												<th>Time</th>
+												<th>Event</th>
+											</tr>
+											<tr>
+												<td>-</td>
+												<td>-</td>
+												<td>-</td>
+											</tr>
+										</table>
+									</div>
+									<br />
+									{/* recent memories */}
+									<ExpSlide />
+
+									<ThreadList communityData={communityData} />
+								</div>
 							</div>
-							<br />
-							{/* recent memories */}
-							<ExpSlide />
-
-							<ThreadList communityData={communityData} />
-						</div>
-					</div>
+						</>
+					)}
 				</div>
 			</section>
 		</>

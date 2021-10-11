@@ -4,7 +4,7 @@ import Chat from "../pages/Chat";
 import Community from "../pages/Community";
 import CommunityGSettings from "../pages/CommunityGSettings";
 import CreateCommunity from "../pages/CreateCommunity";
-import userProfile from "../pages/userProfile";
+import UserProfile from "../pages/UserProfile";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import Thread from "../pages/Thread";
@@ -18,7 +18,7 @@ const allPages = [
 	{ path: "/community/:id/create", component: CreateThread },
 	{ path: "/community/:id/settings/", component: CommunityGSettings },
 	{ path: "/createCommunity", component: CreateCommunity },
-	{ path: "/profile/:id", component: userProfile },
+	{ path: "/profile/:id", component: UserProfile },
 	{ path: "/", component: Home },
 ];
 
