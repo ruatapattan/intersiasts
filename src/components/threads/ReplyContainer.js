@@ -28,9 +28,7 @@ function ReplyContainer({ threadData, threadReply }) {
 					marginBottom: "0.25rem",
 				}}
 			>
-				{/* {sortedReplyReplies?.map((item) => ( */}
 				<CommentItem noMore={"yes"} threadData={threadData} threadReply={threadReply} type="replyReply" />
-				{/* ))} */}
 			</div>
 		</>
 	);

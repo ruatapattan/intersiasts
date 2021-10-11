@@ -3,9 +3,12 @@ import { HandThumbsUp, HandThumbsUpFill, Reply } from "react-bootstrap-icons";
 import { createdAgo } from "../../services/getTimeService";
 import ThreadReplyForm from "./ThreadReplyForm";
 import { AuthContext } from "../../contexts/AuthContext";
-import { PencilSquare } from "react-bootstrap-icons";
+import { PencilSquare, Trash } from "react-bootstrap-icons";
 import { isOwner } from "../../services/isOwnerService";
 import axios from "../../config/axios";
+
+import Swal from "sweetalert2";
+
 const INITIAL_DATA = {
 	title: "Lorem ipsum, dolor sit amet consectetur adipisicing",
 	content:
@@ -34,7 +37,7 @@ function CommentItem({ noMore, threadData, threadReply, type = "threadReply" }) 
 		setScrollHeight(ref?.current?.scrollHeight);
 	}, [isEditing]);
 
-	console.log("here2", threadReply);
+	// console.log("here2", threadReply);
 
 	// const [commentType, setCommentType] = useState(type);
 
@@ -89,6 +92,69 @@ function CommentItem({ noMore, threadData, threadReply, type = "threadReply" }) 
 		});
 		setLiked((cur) => !cur);
 		setLikeCount((cur) => cur - 1);
+	};
+	const arr = [];
+	const xd = threadReply?.ReplyReplies?.map((item) => item.id);
+	console.log("xd", xd);
+	const handleClickThreadReplyDelete = async (e) => {
+		e.preventDefault();
+
+		const result = await Swal.fire({
+			title: "Are you sure?",
+			text: "This will be gone forever!",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Yes, delete it!",
+			background: "#23272a",
+			customClass: {
+				htmlContainer: "whiteText",
+				title: "whiteText",
+			},
+		});
+
+		if (result.isConfirmed) {
+			if (thread) {
+				const deleted =
+					type === "replyReply"
+						? //if deleting replyReply
+						  await axios.delete(`http://localhost:8080/thread/replyReply/${threadReply.id}/delete`)
+						: //if deleteing threadReply
+						  await axios.delete(`http://localhost:8080/thread/threadReply/${threadReply.id}/delete`, {
+								//send arrays of threadRepliesIds, replyRepliesIds
+
+								data: {
+									replyRepliesIds: threadReply?.ReplyReplies?.map((item) => item.id),
+								},
+						  });
+				const done = await Swal.fire({
+					icon: "success",
+					title: "Deleted!",
+					text: "Your file has been deleted.",
+					background: "#23272a",
+					customClass: {
+						htmlContainer: "whiteText",
+						title: "whiteText",
+					},
+				});
+				done.isConfirmed && window.location.reload();
+			} else {
+				Swal.fire({
+					icon: "error",
+					title: "Error!",
+					text: "An error occured, try again",
+					background: "#23272a",
+					customClass: {
+						htmlContainer: "whiteText",
+						title: "whiteText",
+					},
+				});
+			}
+		}
+	};
+	const handleClickReplyReplyDelete = async (e) => {
+		e.preventDefault();
 	};
 
 	return (
@@ -181,13 +247,28 @@ function CommentItem({ noMore, threadData, threadReply, type = "threadReply" }) 
 						</div>
 					)}
 					{isOwner(user.id, threadReply?.replierId) && (
-						<div
-							style={{ display: "flex", alignItems: "center" }}
-							onClick={() => setIsEditing((cur) => !cur)}
-						>
-							<span style={{ margin: "0.25rem" }}>Edit</span>
-							<PencilSquare />
-						</div>
+						<>
+							<div
+								style={{ display: "flex", alignItems: "center" }}
+								onClick={() => setIsEditing((cur) => !cur)}
+							>
+								<span style={{ margin: "0.25rem" }}>Edit</span>
+								<PencilSquare />
+							</div>
+							<div
+								style={{
+									display: "flex",
+									alignItems: "center",
+									cursor: "pointer",
+									marginLeft: "0.25rem",
+									marginRight: "0.25rem",
+								}}
+								onClick={handleClickThreadReplyDelete}
+							>
+								<span style={{ margin: "0.25rem" }}>Delete</span>
+								<Trash />
+							</div>
+						</>
 					)}
 				</div>
 			</div>

@@ -37,9 +37,6 @@ function CommentContainer({ threadData, threadReply }) {
 			</div>
 
 			{/* reply of reply */}
-			{/* <div className="repliesContainer" style={{ display: "flex", justifyContent: "end" }}>
-				<ReplyContainer threadData={threadData} threadReply={threadReply} />
-			</div> */}
 			{/* revised */}
 			<div className="repliesContainer" style={{ display: "flex", alignItems: "end", flexDirection: "column" }}>
 				{sortedReplyReplies?.map((item) => (

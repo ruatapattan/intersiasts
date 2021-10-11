@@ -16,6 +16,7 @@ const INITIAL_DATA = {
 
 function ThreadContentItem({ threadData }) {
 	const { community, poster, thread, threadLikes, threadReplies } = threadData;
+
 	const { user } = useContext(AuthContext);
 	const [isEditing, setIsEditing] = useState(false);
 	const [scrollHeight, setScrollHeight] = useState(0);
@@ -28,10 +29,13 @@ function ThreadContentItem({ threadData }) {
 	console.log(likeCount);
 
 	// console.log("thread:", thread?.content);
-	// console.log("thread state:", editInput);
+	console.log("thread state:", editInput);
 	// console.log("thread: ", thread);
 	// console.log("threadLike: ", threadData.threadLikes);
-	// console.log("threadReply: ", threadData.threadReplies);
+	// console.log(
+	// "threadReply: ",
+	threadReplies?.forEach((item) => console.log(item));
+	// );
 
 	useEffect(() => {
 		// console.log("myContainer..", ref.current);
@@ -63,41 +67,57 @@ function ThreadContentItem({ threadData }) {
 
 	//delete whole thread
 	const handleClickDel = async () => {
-		if (thread) {
-			const deleted = axios.delete(`http://localhost:8080/thread/${thread.id}/delete`);
+		const result = await Swal.fire({
+			title: "Are you sure?",
+			text: "This will be gone forever!",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Yes, delete it!",
+			background: "#23272a",
+			customClass: {
+				htmlContainer: "whiteText",
+				title: "whiteText",
+			},
+		});
+		if (result.isConfirmed) {
+			if (thread) {
+				const rrIdToAdd = [];
+				threadReplies?.forEach((item) => item.ReplyReplies.forEach((elem) => rrIdToAdd.push(elem.id)));
+
+				const deleted = await axios.delete(`http://localhost:8080/thread/${thread.id}/delete`, {
+					//send arrays of threadRepliesIds, replyRepliesIds
+
+					data: {
+						threadRepliesIds: threadReplies?.map((item) => item.id),
+						replyRepliesIds: rrIdToAdd,
+					},
+				});
+				const done = await Swal.fire({
+					icon: "success",
+					title: "Deleted!",
+					text: "Your file has been deleted.",
+					background: "#23272a",
+					customClass: {
+						htmlContainer: "whiteText",
+						title: "whiteText",
+					},
+				});
+				done.isConfirmed && history.push(`/community/${community.id}`);
+			} else {
+				Swal.fire({
+					icon: "error",
+					title: "Error!",
+					text: "An error occured, try again",
+					background: "#23272a",
+					customClass: {
+						htmlContainer: "whiteText",
+						title: "whiteText",
+					},
+				});
+			}
 		}
-
-		// const result = await Swal.fire({
-		// 	title: "Are you sure?",
-		// 	text: "You won't be able to revert this!",
-		// 	icon: "warning",
-		// 	showCancelButton: true,
-		// 	confirmButtonColor: "#3085d6",
-		// 	cancelButtonColor: "#d33",
-		// 	confirmButtonText: "Yes, delete it!",
-		// 	background: "#23272a",
-		// 	customClass: {
-		// 		htmlContainer: "whiteText",
-		// 		title: "whiteText",
-		// 	},
-		// });
-		// if (result.isConfirmed) {
-		// 	const deleted = axios.delete(`http://localhost:8080/thread/${thread.id}/delete`);
-
-		// 	const done = await Swal.fire({
-		// 		icon: "success",
-		// 		title: "Deleted!",
-		// 		text: "Your file has been deleted.",
-		// 		background: "#23272a",
-		// 		customClass: {
-		// 			htmlContainer: "whiteText",
-		// 			title: "whiteText",
-		// 		},
-		// 	});
-
-		// 	// done.isConfirmed === true
-		// 	// history.push(`/community/${community.id}`);
-		// }
 	};
 
 	const handleClickCancelEdit = () => {
@@ -109,7 +129,7 @@ function ThreadContentItem({ threadData }) {
 		e.preventDefault();
 		// send content, threadId
 
-		await axios.put(`http://localhost:8080/thread/${thread.id}/edit`, { content: editInput.content });
+		await axios.put(`http://localhost:8080/thread/${thread.id}/edit`, { content: editInput });
 
 		window.location.reload();
 	};
@@ -173,7 +193,7 @@ function ThreadContentItem({ threadData }) {
 					<form onSubmit={handleSubmitEditThread}>
 						<textarea
 							ref={ref}
-							value={editInput.content}
+							value={editInput}
 							style={{
 								width: "100%",
 								boxSizing: "border-box",
@@ -185,7 +205,7 @@ function ThreadContentItem({ threadData }) {
 								overflowY: "auto",
 								borderRadius: "10px",
 							}}
-							onChange={(e) => setEditInput((cur) => ({ ...cur, content: e.target.value }))}
+							onChange={(e) => setEditInput(e.target.value)}
 						/>
 						<div
 							className="buttonContainer"
