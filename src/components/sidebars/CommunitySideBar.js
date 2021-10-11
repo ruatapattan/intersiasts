@@ -45,7 +45,7 @@ function CommunitySideBar({ communityData, staticCommunityId }) {
 			</div>
 
 			<div className="communitySettings">
-				<Link to="/community/:id/settings/general">
+				<Link to={`/community/${community?.id}/settings/`}>
 					<div className="btn settingsbtn">
 						<Gear />
 					</div>

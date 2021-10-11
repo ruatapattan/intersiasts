@@ -17,13 +17,13 @@ function Thread() {
 		const fetch = async () => {
 			const fetchedThreads = await axios.get(`http://localhost:8080/thread/${params.threadId}`);
 			setCommunityData({ ...fetchedThreads.data });
-			setThreadContextData({ ...fetchedThreads.data });
+			// setThreadContextData({ ...fetchedThreads.data });
 		};
 
 		fetch();
 	}, []);
 
-	// console.log(threadContextData);
+	console.log(communityData);
 
 	return (
 		<>

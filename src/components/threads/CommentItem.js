@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { HandThumbsUp, HandThumbsUpFill, Reply } from "react-bootstrap-icons";
+import { HandThumbsUp, HandThumbsUpFill, PersonFill, Reply } from "react-bootstrap-icons";
 import { createdAgo } from "../../services/getTimeService";
 import ThreadReplyForm from "./ThreadReplyForm";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -160,7 +160,7 @@ function CommentItem({ noMore, threadData, threadReply, type = "threadReply" }) 
 	return (
 		<>
 			<div className="posterInfo" style={{ display: "flex", alignItems: "center" }}>
-				<img
+				{/* <img
 					src=""
 					alt=""
 					style={{
@@ -169,7 +169,30 @@ function CommentItem({ noMore, threadData, threadReply, type = "threadReply" }) 
 						width: "2rem",
 						height: "2rem",
 					}}
-				/>
+				/> */}
+
+				{poster?.profilePic ? (
+					<img
+						src={poster?.profilePic}
+						alt=""
+						style={{
+							marginRight: "10px",
+							border: "1px white solid",
+							width: "2rem",
+							height: "2rem",
+						}}
+					/>
+				) : (
+					<PersonFill
+						style={{
+							marginRight: "10px",
+							border: "1px white solid",
+							width: "2rem",
+							height: "2rem",
+						}}
+					/>
+				)}
+
 				<p
 					style={{
 						// margin: "1rem initial",
@@ -178,7 +201,7 @@ function CommentItem({ noMore, threadData, threadReply, type = "threadReply" }) 
 						color: "slategrey",
 					}}
 				>
-					posted by: {poster?.username} {Math.round(createdAgo(threadReply?.createdAt).time)}{" "}
+					{poster?.username} {Math.round(createdAgo(threadReply?.createdAt).time)}{" "}
 					{createdAgo(threadReply?.createdAt).unit} ago
 				</p>
 			</div>

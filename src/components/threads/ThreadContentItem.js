@@ -1,5 +1,5 @@
 import { useContext, useRef, useEffect, useState } from "react";
-import { HandThumbsUp, ChatLeft, PencilSquare, Trash, HandThumbsUpFill } from "react-bootstrap-icons";
+import { HandThumbsUp, ChatLeft, PencilSquare, Trash, HandThumbsUpFill, PersonFill } from "react-bootstrap-icons";
 import { AuthContext } from "../../contexts/AuthContext";
 import { createdAgo } from "../../services/getTimeService";
 import { isOwner } from "../../services/isOwnerService";
@@ -7,12 +7,6 @@ import axios from "../../config/axios";
 import { useHistory } from "react-router-dom";
 
 import Swal from "sweetalert2";
-
-const INITIAL_DATA = {
-	title: "Lorem ipsum, dolor sit amet consectetur adipisicing",
-	content:
-		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, corrupti nemo quisquam debitis magni voluptatibus nisi ut quo alias! Vitae neque aliquid debitis voluptates labore consequuntur nemo quam. Quod exercitationem fugit dolores magni quisquam officiis modi esse praesentium asperiores dolorem repellendus tempora, nulla quos vitae eius velit rem voluptas dolorum nisi veritatis voluptate laudantium quo. Cumque quibusdam velit id eligendi voluptatem, sint exercitationem eveniet maiores iste numquam consectetur odit minus esse perferendis? Modi, quae et? Deleniti sint enim tenetur dolor inventore corrupti ex odio pariatur?",
-};
 
 function ThreadContentItem({ threadData }) {
 	const { community, poster, thread, threadLikes, threadReplies } = threadData;
@@ -26,15 +20,18 @@ function ThreadContentItem({ threadData }) {
 	const history = useHistory();
 	const ref = useRef();
 
-	console.log(likeCount);
+	// console.log(likeCount);
+
+	console.log("posterPic", poster?.profilePic);
+	console.log(threadData.images);
 
 	// console.log("thread:", thread?.content);
-	console.log("thread state:", editInput);
+	// console.log("thread state:", editInput);
 	// console.log("thread: ", thread);
 	// console.log("threadLike: ", threadData.threadLikes);
 	// console.log(
 	// "threadReply: ",
-	threadReplies?.forEach((item) => console.log(item));
+	// threadReplies?.forEach((item) => console.log(item));
 	// );
 
 	useEffect(() => {
@@ -120,6 +117,17 @@ function ThreadContentItem({ threadData }) {
 		}
 	};
 
+	const cursorAtEnd = (e) => {
+		//hold onto value
+		let temp_value = e.target.value;
+
+		//delete value
+		e.target.value = "";
+
+		//set held value back
+		e.target.value = temp_value;
+	};
+
 	const handleClickCancelEdit = () => {
 		setEditInput(thread?.content);
 		setIsEditing(false);
@@ -127,6 +135,7 @@ function ThreadContentItem({ threadData }) {
 
 	const handleSubmitEditThread = async (e) => {
 		e.preventDefault();
+
 		// send content, threadId
 
 		await axios.put(`http://localhost:8080/thread/${thread.id}/edit`, { content: editInput });
@@ -166,18 +175,29 @@ function ThreadContentItem({ threadData }) {
 				}}
 			>
 				<div className="posterInfo" style={{ display: "flex", alignItems: "center" }}>
-					<img
-						src=""
-						alt=""
-						style={{
-							marginRight: "10px",
-							border: "1px white solid",
-							width: "2rem",
-							height: "2rem",
-						}}
-					/>
+					{poster?.profilePic ? (
+						<img
+							src={poster?.profilePic}
+							alt=""
+							style={{
+								marginRight: "10px",
+								border: "1px white solid",
+								width: "2rem",
+								height: "2rem",
+							}}
+						/>
+					) : (
+						<PersonFill
+							style={{
+								marginRight: "10px",
+								border: "1px white solid",
+								width: "2rem",
+								height: "2rem",
+							}}
+						/>
+					)}
 					<p style={{ margin: 0, padding: 0, fontSize: "0.7rem", color: "slategrey" }}>
-						posted by: {poster?.username} {Math.round(createdAgo(thread?.createdAt).time)}{" "}
+						{poster?.username} {Math.round(createdAgo(thread?.createdAt).time)}{" "}
 						{createdAgo(thread?.createdAt).unit} ago
 					</p>
 				</div>
@@ -188,12 +208,19 @@ function ThreadContentItem({ threadData }) {
 				</p>
 
 				{/* content preview */}
-				{!isEditing && <p style={{ margin: 0 }}>{thread?.content}</p>}
+				{!isEditing && (
+					<>
+						<p style={{ margin: 0 }}>{thread?.content}</p>
+					</>
+				)}
+
 				{isEditing && (
 					<form onSubmit={handleSubmitEditThread}>
 						<textarea
 							ref={ref}
 							value={editInput}
+							autoFocus={true}
+							onFocus={cursorAtEnd}
 							style={{
 								width: "100%",
 								boxSizing: "border-box",
@@ -220,6 +247,11 @@ function ThreadContentItem({ threadData }) {
 						</div>
 					</form>
 				)}
+
+				{threadData.images?.length > 0 &&
+					threadData?.images?.map((item) => (
+						<img style={{ width: "100%", height: "100%" }} src={threadData.images} />
+					))}
 
 				<div className="threadInfo" style={{ display: "flex", justifyContent: "end", fontSize: "0.8rem" }}>
 					<div
