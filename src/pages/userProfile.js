@@ -8,6 +8,7 @@ import { user } from "../services/localstorage";
 import { PencilSquare, PersonFill } from "react-bootstrap-icons";
 import validator from "validator";
 import passwordValidate from "../services/passwordValidate";
+import Swal from "sweetalert2";
 
 // import PopupContainer from "../components/sidebars/PopupContainer";
 
@@ -48,8 +49,10 @@ function UserProfile() {
 	}, [userInfo]);
 
 	useEffect(() => {
-		setProfilePicToShow(userInfo.profilePic);
+		setProfilePicToShow(userInfo?.profilePic?.secure_url);
 	}, [userInfo?.profilePic]);
+
+	console.log(profilePicToShow);
 
 	// console.log("userInfo", userInfo);
 	// // console.log("cpics", userCommunities);
@@ -87,10 +90,13 @@ function UserProfile() {
 	const handleChangePassword = (e) => {
 		setEditProfileInput((cur) => ({ ...cur, password: e.target.value }));
 
-		if (!passwordValidate.validateCharacter(editProfileInput.password)) {
+		if (e.target.value === "") {
+			setPasswordError("");
+		} else if (e.target.value === "" && editProfileInput.confirmPassword === "") {
+			setPasswordConfirmError("");
+		} else if (!passwordValidate.validateCharacter(e.target.value)) {
 			setPasswordError("password must contain small letter, capitalized letter, and number");
-		}
-		if (!passwordValidate.validateLength(editProfileInput.password)) {
+		} else if (!passwordValidate.validateLength(e.target.value)) {
 			setPasswordError("password must be at least 8 characters long");
 		} else {
 			setPasswordError("");
@@ -99,6 +105,7 @@ function UserProfile() {
 
 	const handleChangeConfirmPassword = (e) => {
 		setEditProfileInput((cur) => ({ ...cur, confirmPassword: e.target.value }));
+
 		if (editProfileInput.password !== e.target.value) {
 			setPasswordConfirmError("confirm password does not match!");
 		} else {
@@ -120,9 +127,44 @@ function UserProfile() {
 	};
 	const handleSubmitEditProfile = async (e) => {
 		e.preventDefault();
-		if (emailError === "" && passwordError === "" && setPasswordConfirmError === "") {
-			const formData = new FormData();
-			formData.append("email", editProfileInput.email);
+		if (emailError === "" && passwordError === "" && passwordConfirmError === "" && imageError === "") {
+			if (
+				editProfileInput.email === "" &&
+				editProfileInput.password === "" &&
+				editProfileInput.profilePic === null
+			) {
+				console.log("hii");
+				Swal.fire({
+					title: "You didn't change anything.",
+					background: "#23272a",
+					customClass: {
+						htmlContainer: "whiteText",
+						title: "whiteText",
+					},
+				});
+			} else {
+				console.log("hii");
+				const formData = new FormData();
+				if (editProfileInput.email !== "") {
+					formData.append("email", editProfileInput.email);
+				}
+				if (editProfileInput.password !== "") {
+					formData.append("password", editProfileInput.password);
+				}
+				if (editProfileInput.profilePic !== null) {
+					formData.append("cloudinput", editProfileInput.profilePic);
+				}
+				const edited = await axios.put(`/profile/${params.id}/edit`, formData);
+				const done = await Swal.fire({
+					title: "change successful.",
+					background: "#23272a",
+					customClass: {
+						htmlContainer: "whiteText",
+						title: "whiteText",
+					},
+				});
+				if (done.isConfirmed) window.location.reload();
+			}
 		}
 	};
 
