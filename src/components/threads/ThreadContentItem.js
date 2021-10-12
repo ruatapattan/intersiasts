@@ -83,7 +83,7 @@ function ThreadContentItem({ threadData }) {
 				const rrIdToAdd = [];
 				threadReplies?.forEach((item) => item.ReplyReplies.forEach((elem) => rrIdToAdd.push(elem.id)));
 
-				const deleted = await axios.delete(`http://localhost:8080/thread/${thread.id}/delete`, {
+				await axios.delete(`http://localhost:8080/thread/${thread.id}/delete`, {
 					//send arrays of threadRepliesIds, replyRepliesIds
 
 					data: {
@@ -250,7 +250,7 @@ function ThreadContentItem({ threadData }) {
 
 				{threadData.images?.length > 0 &&
 					threadData?.images?.map((item) => (
-						<img style={{ width: "100%", height: "100%" }} src={threadData.images} />
+						<img style={{ width: "100%", height: "100%" }} src={threadData.images} alt="threadImg" />
 					))}
 
 				<div className="threadInfo" style={{ display: "flex", justifyContent: "end", fontSize: "0.8rem" }}>

@@ -1,7 +1,7 @@
-import { useState } from "react";
+// import { useState } from "react";
 import CommentItem from "./CommentItem";
 import ReplyContainer from "./ReplyContainer";
-import ThreadReplyForm from "./ThreadReplyForm";
+// import ThreadReplyForm from "./ThreadReplyForm";
 
 function CommentContainer({ threadData, threadReply }) {
 	// console.log(threadData);

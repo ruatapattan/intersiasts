@@ -9,12 +9,6 @@ import axios from "../../config/axios";
 
 import Swal from "sweetalert2";
 
-const INITIAL_DATA = {
-	title: "Lorem ipsum, dolor sit amet consectetur adipisicing",
-	content:
-		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, corrupti nemo quisquam debitis magni voluptatibus nisi ut quo alias! Vitae neque aliquid debitis voluptates labore consequuntur nemo quam. Quod exercitationem fugit dolores magni quisquam officiis modi esse praesentium asperiores dolorem repellendus tempora, nulla quos vitae eius velit rem voluptas dolorum nisi veritatis voluptate laudantium quo. Cumque quibusdam velit id eligendi voluptatem, sint exercitationem eveniet maiores iste numquam consectetur odit minus esse perferendis? Modi, quae et? Deleniti sint enim tenetur dolor inventore corrupti ex odio pariatur?",
-};
-
 function CommentItem({ noMore, threadData, threadReply, type = "threadReply" }) {
 	const [isCommenting, setIsCommenting] = useState(false);
 	const [isEditing, setIsEditing] = useState(false);
@@ -93,9 +87,6 @@ function CommentItem({ noMore, threadData, threadReply, type = "threadReply" }) 
 		setLiked((cur) => !cur);
 		setLikeCount((cur) => cur - 1);
 	};
-	const arr = [];
-	const xd = threadReply?.ReplyReplies?.map((item) => item.id);
-	console.log("xd", xd);
 	const handleClickThreadReplyDelete = async (e) => {
 		e.preventDefault();
 
@@ -116,18 +107,17 @@ function CommentItem({ noMore, threadData, threadReply, type = "threadReply" }) 
 
 		if (result.isConfirmed) {
 			if (thread) {
-				const deleted =
-					type === "replyReply"
-						? //if deleting replyReply
-						  await axios.delete(`http://localhost:8080/thread/replyReply/${threadReply.id}/delete`)
-						: //if deleteing threadReply
-						  await axios.delete(`http://localhost:8080/thread/threadReply/${threadReply.id}/delete`, {
-								//send arrays of threadRepliesIds, replyRepliesIds
+				type === "replyReply"
+					? //if deleting replyReply
+					  await axios.delete(`http://localhost:8080/thread/replyReply/${threadReply.id}/delete`)
+					: //if deleteing threadReply
+					  await axios.delete(`http://localhost:8080/thread/threadReply/${threadReply.id}/delete`, {
+							//send arrays of threadRepliesIds, replyRepliesIds
 
-								data: {
-									replyRepliesIds: threadReply?.ReplyReplies?.map((item) => item.id),
-								},
-						  });
+							data: {
+								replyRepliesIds: threadReply?.ReplyReplies?.map((item) => item.id),
+							},
+					  });
 				const done = await Swal.fire({
 					icon: "success",
 					title: "Deleted!",
@@ -152,9 +142,6 @@ function CommentItem({ noMore, threadData, threadReply, type = "threadReply" }) 
 				});
 			}
 		}
-	};
-	const handleClickReplyReplyDelete = async (e) => {
-		e.preventDefault();
 	};
 
 	return (

@@ -14,7 +14,7 @@ function RouteContainer() {
 	// console.log(routes[role]);
 
 	return (
-		<>
+		<div style={{ height: "100%" }}>
 			<Header />
 			<Switch>
 				{routes[role].allowedRoutes.map((item, idx) => {
@@ -22,8 +22,8 @@ function RouteContainer() {
 					return <Route key={idx} exact={item.path !== "/"} path={item.path} component={item.component} />;
 				})}
 			</Switch>
-			<Footer />
-		</>
+			{/* <Footer /> */}
+		</div>
 	);
 }
 

@@ -30,7 +30,7 @@ function Carousel() {
 	return (
 		<Slider {...settings} className="carouselBox">
 			{imgArr.map((item, idx) => (
-				<div className={idx === imgIdx ? "slide activeSlide" : "slide"}>
+				<div key={idx} className={idx === imgIdx ? "slide activeSlide" : "slide"}>
 					<img className="image" src={item} alt={item} />
 				</div>
 			))}

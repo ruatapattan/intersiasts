@@ -4,12 +4,14 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { AuthContextProvider } from "./contexts/AuthContext";
 import { HeaderHereProvider } from "./contexts/HeaderHereContext";
+import Footer from "./layout/footer/Footer";
 ReactDOM.render(
 	<React.StrictMode>
 		<BrowserRouter>
 			<AuthContextProvider>
 				<HeaderHereProvider>
 					<App />
+					<Footer />
 				</HeaderHereProvider>
 			</AuthContextProvider>
 		</BrowserRouter>

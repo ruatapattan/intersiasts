@@ -4,7 +4,7 @@ import { useHeaderHere } from "../../contexts/HeaderHereContext";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useContext, useState } from "react";
 import { removeToken } from "../../services/localstorage";
-import { Bell, BellFill, BrightnessAltLowFill } from "react-bootstrap-icons";
+import { BellFill } from "react-bootstrap-icons";
 
 function Header() {
 	const history = useHistory();

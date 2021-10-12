@@ -15,6 +15,10 @@ footer {
 
 /* global */
 
+html {
+	background-color: #23272a !important;
+}
+
 .hidden {
 	display: none;
 }
@@ -33,6 +37,7 @@ body {
 	/* assign max width so that when vw is too much it wont keep stretching and look bad */
 	/* max-width: 1600px; */
 	margin: 0 auto; /* use this to move stuffs to center*/
+	height: 100%;
 	/* min-height: 100%; */
 	padding: 0;
 	background: #23272a;
@@ -46,7 +51,7 @@ html {
 	font-family: "electrolize", sans-serif;
 	font-size: 15px;
 	line-height: 1.5;
-	height: 100%;
+	/* height: 100%; */
 }
 
 .container {
@@ -150,7 +155,7 @@ a {
 /* section1 : intro */
 
 .navSpace {
-	padding-top: 10vh;
+	margin-top: 10vh;
 }
 
 .index {
@@ -1461,4 +1466,15 @@ th {
 
 .whiteText {
 	color: white !important;
+}
+
+.editProfileTable {
+	border: none;
+}
+.editProfileTable * {
+	border: none;
+}
+
+.editProfileTable > tr > td:first-child {
+	text-align: right;
 }

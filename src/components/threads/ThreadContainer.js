@@ -2,8 +2,6 @@ import CommentContainer from "./CommentContainer";
 import ThreadContentItem from "./ThreadContentItem";
 import ThreadReplyForm from "./ThreadReplyForm";
 
-const arr = ["a", "b"];
-
 function ThreadContainer({ threadData }) {
 	// console.log("threadContainer", threadData.threadLikes);
 

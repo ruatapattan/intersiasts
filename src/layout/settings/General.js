@@ -79,7 +79,7 @@ function General({ community, tags, setShowImage }) {
 				formData.append("tag", tagsToSend[i]);
 			}
 
-			const res = await axios.put(`http://localhost:8080/community/${params.id}/settings/general`, formData);
+			await axios.put(`http://localhost:8080/community/${params.id}/settings/general`, formData);
 
 			//redirect to created community
 			// history.push(`/community/${res.data.community.id}`);
@@ -106,7 +106,7 @@ function General({ community, tags, setShowImage }) {
 			},
 		});
 		if (result.isConfirmed) {
-			const deletedCommunity = await axios.delete(`/community/${params.id}/delete`);
+			await axios.delete(`/community/${params.id}/delete`);
 			const done = await Swal.fire({
 				icon: "success",
 				title: "Deleted!",

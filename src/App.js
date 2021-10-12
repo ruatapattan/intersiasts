@@ -3,6 +3,7 @@ import { HeaderHereProvider } from "./contexts/HeaderHereContext";
 import RouteContainer from "./layout/RouteContainer";
 import { CreateContextProvider } from "./contexts/CreateContext";
 import { ThreadContextProvider } from "./contexts/ThreadContext";
+import Footer from "./layout/footer/Footer";
 
 function App() {
 	// const { user } = useContext(AuthContext);
@@ -11,11 +12,12 @@ function App() {
 	// console.log(routes[role]);
 
 	return (
-		<div className="">
+		<div className="" style={{ height: "100%" }}>
 			<HeaderHereProvider>
 				<CreateContextProvider>
 					<ThreadContextProvider>
 						<RouteContainer />
+						{/* <Footer /> */}
 					</ThreadContextProvider>
 				</CreateContextProvider>
 			</HeaderHereProvider>
