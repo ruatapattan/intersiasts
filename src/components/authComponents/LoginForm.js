@@ -17,7 +17,8 @@ function LoginForm() {
 	const [error, setError] = useState("");
 
 	const history = useHistory();
-	if (!shown) {
+
+	if (!shown && location.state !== undefined) {
 		Swal.fire({
 			icon: "success",
 			title: location?.state?.successMessage,
@@ -45,8 +46,8 @@ function LoginForm() {
 			setUser(jwtDecode(result.data.token)); //obj from authcontroller
 			const decoded = jwtDecode(result.data.token).userType;
 			setUserRole(decoded);
-
 			history.push("/");
+			window.location.reload();
 		} catch (err) {
 			console.dir(err);
 			if (err.response && err.response.status === 400 && err.response.data.name === "loginError") {

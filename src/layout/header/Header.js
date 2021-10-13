@@ -11,7 +11,7 @@ function Header() {
 	const history = useHistory();
 	const { here } = useHeaderHere();
 	const { userRole, user, setUser, setUserRole } = useContext(AuthContext);
-	// console.log(user);
+	console.log(userRole);
 
 	const [clickedProfile, setClickedProfile] = useState(false);
 	const [userInfo, setUserInfo] = useState({});
@@ -23,17 +23,20 @@ function Header() {
 		setUserRole("guest");
 		setClickedProfile((cur) => !cur);
 		history.push("/");
+		window.location.reload();
 	};
 
 	useEffect(() => {
 		const fetch = async () => {
-			const result = await axios.get(`/profile/${user?.id}`);
-			setUserInfo(result?.data?.userProfile);
+			if (userRole !== "guest") {
+				const result = await axios.get(`/profile/${user.id}`);
+				setUserInfo(result?.data?.userProfile);
+			}
 		};
 		fetch();
 	}, []);
 
-	console.log(userInfo?.profilePic?.secure_url);
+	// console.log(userInfo?.profilePic?.secure_url);
 
 	return (
 		<>
