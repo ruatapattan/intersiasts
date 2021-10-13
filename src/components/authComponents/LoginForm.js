@@ -1,19 +1,37 @@
 import axios from "axios";
 import { useContext, useState } from "react";
 import { setToken } from "../../services/localstorage";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import { AuthContext } from "../../contexts/AuthContext";
+import Swal from "sweetalert2";
 function LoginForm() {
 	const [userInput, setUserInput] = useState({
 		username: "",
 		password: "",
 	});
-
+	const [shown, setShown] = useState(false);
+	const location = useLocation();
+	console.log(location?.state);
 	const { setUser, setUserRole } = useContext(AuthContext);
 	const [error, setError] = useState("");
 
 	const history = useHistory();
+	if (!shown) {
+		Swal.fire({
+			icon: "success",
+			title: location?.state?.successMessage,
+			background: "#23272a",
+			customClass: {
+				htmlContainer: "whiteText",
+				title: "whiteText",
+			},
+		}).then((res) => {
+			if (res.isConfirmed) {
+				setShown(true);
+			}
+		});
+	}
 
 	const handleSubmitLogin = async (e) => {
 		try {

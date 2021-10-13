@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { HandThumbsUp, Reply } from "react-bootstrap-icons";
 import { useParams } from "react-router-dom";
 import { createdAgo } from "../../services/getTimeService";
-
+import Swal from "sweetalert2";
 const limit = (text) => {
 	if (text.length > 600) {
 		return text.slice(0, 599) + "...";
@@ -12,10 +12,24 @@ const limit = (text) => {
 	return text;
 };
 
-function ThreadItem({ threadData }) {
+function ThreadItem({ threadData, isMember }) {
 	// const { user } = useContext(AuthContext);
 
 	const params = useParams();
+	// console.log(params);
+
+	const handleClickLinkNotMember = (e) => {
+		e.preventDefault();
+		Swal.fire({
+			title: "You must be a member to view threads!",
+			icon: "warning",
+			background: "#23272a",
+			customClass: {
+				htmlContainer: "whiteText",
+				title: "whiteText",
+			},
+		});
+	};
 
 	return (
 		<div
@@ -28,7 +42,10 @@ function ThreadItem({ threadData }) {
 				marginBottom: "0.25rem",
 			}}
 		>
-			<Link to={`/community/${params.id}/thread/${threadData.id}`}>
+			<Link
+				to={isMember ? `/community/${params.communityId}/thread/${threadData.id}` : "#"}
+				onClick={!isMember && handleClickLinkNotMember}
+			>
 				{/* created by */}
 				<div className="posterInfo">
 					<p style={{ margin: 0, padding: 0, fontSize: "0.7rem", color: "slategrey" }}>

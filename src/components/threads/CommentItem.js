@@ -32,6 +32,7 @@ function CommentItem({ noMore, threadData, threadReply, type = "threadReply" }) 
 	}, [isEditing]);
 
 	// console.log("here2", threadReply);
+	// console.log("replier pic", threadReply?.User?.profilePic?.secure_url);
 
 	// const [commentType, setCommentType] = useState(type);
 
@@ -160,7 +161,7 @@ function CommentItem({ noMore, threadData, threadReply, type = "threadReply" }) 
 
 				{poster?.profilePic ? (
 					<img
-						src={poster?.profilePic}
+						src={threadReply?.User?.profilePic?.secure_url}
 						alt=""
 						style={{
 							marginRight: "10px",
@@ -188,7 +189,7 @@ function CommentItem({ noMore, threadData, threadReply, type = "threadReply" }) 
 						color: "slategrey",
 					}}
 				>
-					{poster?.username} {Math.round(createdAgo(threadReply?.createdAt).time)}{" "}
+					{threadReply?.User?.username} {Math.round(createdAgo(threadReply?.createdAt).time)}{" "}
 					{createdAgo(threadReply?.createdAt).unit} ago
 				</p>
 			</div>

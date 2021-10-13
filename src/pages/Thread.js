@@ -21,13 +21,13 @@ function Thread() {
 		fetch();
 	}, []);
 
-	console.log(communityData);
+	console.log("communityData", communityData);
 
 	return (
 		<>
 			<div className="container compartment navSpace">
-				<CommunitySideBar communityData={communityData} staticCommunityId={params.id} />
-				<ThreadContainer threadData={communityData} staticCommunityId={params.id} />
+				<CommunitySideBar communityData={communityData} staticCommunityId={params.communityId} />
+				<ThreadContainer threadData={communityData} staticCommunityId={params.communityId} />
 			</div>
 		</>
 	);

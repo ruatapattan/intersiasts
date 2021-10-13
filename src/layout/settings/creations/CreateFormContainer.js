@@ -116,7 +116,8 @@ function CreateFormContainer({ createInfo }) {
 		}
 	};
 
-	console.log(createInput);
+	// console.log(createInput);
+	console.log("params", params);
 
 	return (
 		<>

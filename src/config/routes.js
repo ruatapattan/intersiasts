@@ -13,7 +13,7 @@ import CreateThread from "../pages/CreateThread";
 const allPages = [
 	{ path: "/browse", component: Browse },
 	{ path: "/chat/:id", component: Chat },
-	{ path: "/community/:id", component: Community },
+	{ path: "/community/:communityId", component: Community },
 	{ path: "/community/:communityId/thread/:threadId", component: Thread },
 	{ path: "/community/:id/create", component: CreateThread },
 	{ path: "/community/:id/settings/", component: CommunityGSettings },

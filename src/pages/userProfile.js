@@ -16,6 +16,7 @@ import Swal from "sweetalert2";
 
 function UserProfile() {
 	const [userInfo, setUserInfo] = useState({});
+	const [joinedCommunityList, setJoinedCommunityList] = useState([]);
 	const [profilePicToShow, setProfilePicToShow] = useState(null);
 	const [userCommunities, setUserCommunities] = useState([]);
 	const [currentSideBarNav, setCurrentSideBarNav] = useState("profile");
@@ -35,24 +36,31 @@ function UserProfile() {
 		const fetch = async () => {
 			const result = await axios.get(`/profile/${params.id}`);
 			setUserInfo(result.data.userProfile);
+			const joinedCommunity = await axios.get(`/community/browse/${result.data.userProfile.id}/joined`);
+			// console.log("joined inside", joinedCommunity);
+			setJoinedCommunityList(joinedCommunity.data.joinedCommunities);
 		};
 		fetch();
 	}, []);
 
-	useEffect(() => {
-		setUserCommunities(
-			userInfo?.CommunityMembers?.map((item) => ({
-				communityId: item?.Community?.id,
-				communityImage: item?.Community?.communityImage?.secure_url,
-			}))
-		);
-	}, [userInfo]);
+	// console.log(userInfo?.id);
+	console.log("joined list", joinedCommunityList);
+
+	// useEffect(() => {
+	// 	setUserCommunities(
+	// 		userInfo?.CommunityMembers?.map((item) => ({
+	// 			communityId: item?.Community?.id,
+	// 			communityImage: item?.Community?.communityImage?.secure_url,
+	// 		}))
+	// 	);
+	// }, [userInfo]);
 
 	useEffect(() => {
 		setProfilePicToShow(userInfo?.profilePic?.secure_url);
 	}, [userInfo?.profilePic]);
 
-	console.log(profilePicToShow);
+	// console.log(profilePicToShow);
+	console.log(userCommunities);
 
 	// console.log("userInfo", userInfo);
 	// // console.log("cpics", userCommunities);
@@ -222,7 +230,7 @@ function UserProfile() {
 								<>
 									<p> Email : {userInfo?.email}</p>
 									<div style={{ width: "100%", marginBottom: "1rem" }}>
-										<ExpSlide userCommunities={userCommunities} />
+										<ExpSlide joinedCommunityList={joinedCommunityList} />
 									</div>
 								</>
 							)}

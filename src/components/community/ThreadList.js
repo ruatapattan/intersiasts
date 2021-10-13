@@ -1,6 +1,12 @@
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
+import { isMember } from "../../services/isMemberService";
 import ThreadItem from "./ThreadItem";
 
 function ThreadList({ communityData }) {
+	const { user } = useContext(AuthContext);
+
+	const memberList = communityData?.communityMembers?.map((item) => item.memberId);
 	return (
 		<div
 			style={{
@@ -13,7 +19,7 @@ function ThreadList({ communityData }) {
 
 			{/* //map threads after useEffect took effect */}
 			{communityData?.threads?.map((item) => (
-				<ThreadItem threadData={item} />
+				<ThreadItem threadData={item} isMember={isMember(user.id, memberList)} />
 			))}
 		</div>
 	);

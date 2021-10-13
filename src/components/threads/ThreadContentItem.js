@@ -22,8 +22,8 @@ function ThreadContentItem({ threadData }) {
 
 	// console.log(likeCount);
 
-	console.log("posterPic", poster?.profilePic);
-	console.log(threadData.images);
+	// console.log("posterPic", poster?.profilePic);
+	// console.log(threadData.images);
 
 	// console.log("thread:", thread?.content);
 	// console.log("thread state:", editInput);
@@ -161,7 +161,7 @@ function ThreadContentItem({ threadData }) {
 		setLikeCount((cur) => cur - 1);
 	};
 
-	console.log("-------------------------------");
+	// console.log("-------------------------------");
 
 	return (
 		<>
@@ -176,16 +176,16 @@ function ThreadContentItem({ threadData }) {
 			>
 				<div className="posterInfo" style={{ display: "flex", alignItems: "center" }}>
 					{poster?.profilePic ? (
-						<img
-							src={poster?.profilePic}
-							alt=""
-							style={{
-								marginRight: "10px",
-								border: "1px white solid",
-								width: "2rem",
-								height: "2rem",
-							}}
-						/>
+						<div style={{ marginRight: "10px", border: "1px white solid", width: "2rem", height: "2rem" }}>
+							<img
+								src={poster?.profilePic.secure_url}
+								alt=""
+								style={{
+									width: "100%",
+									height: "100%",
+								}}
+							/>
+						</div>
 					) : (
 						<PersonFill
 							style={{

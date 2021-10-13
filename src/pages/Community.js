@@ -12,6 +12,7 @@ function Community() {
 	// const { setCommunityData, communityData } = useContext(CommunityContext);
 
 	const params = useParams();
+	// console.log(params.communityId);
 	//useContext()
 	//useeffect => get Id from useparam {
 	// res = axios => fetch all threads
@@ -21,7 +22,7 @@ function Community() {
 		console.log("hello");
 		const fetch = async () => {
 			// console.log(params.id);
-			const fetchedThreads = await axios.get(`http://localhost:8080/community/${params.id}`);
+			const fetchedThreads = await axios.get(`http://localhost:8080/community/${params.communityId}`);
 			setCommunityData({ ...fetchedThreads.data });
 		};
 		fetch();
@@ -35,12 +36,12 @@ function Community() {
 				<div className="container compartment navSpace">
 					{Object.keys(communityData).length > 0 && (
 						<>
-							<CommunitySideBar communityData={communityData} staticCommunityId={params.id} />
+							<CommunitySideBar communityData={communityData} staticCommunityId={params.communityId} />
 
 							<div className="center w70">
 								<div className="centerContent">
 									{/* <!-- event table --> */}
-									<div className="eventTableContainer">
+									{/* <div className="eventTableContainer">
 										<p>Event Schedule</p>
 										<table className="eventTable">
 											<tr>
@@ -54,6 +55,10 @@ function Community() {
 												<td>-</td>
 											</tr>
 										</table>
+									</div> */}
+									<div style={{ width: "100%", textAlign: "center" }}>
+										<h2>About this community:</h2>
+										<p>{communityData?.community?.description}</p>
 									</div>
 									<br />
 									{/* recent memories */}

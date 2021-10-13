@@ -1,8 +1,10 @@
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 // import { useHistory } from "react-router-dom";
-
+import { AuthContext } from "../../contexts/AuthContext";
 function ThreadReplyForm({ threadId, replierId, commentType }) {
+	const { user } = useContext(AuthContext);
+	// console.log(user.id);
 	const [commentInput, setCommentInput] = useState("");
 	// console.log(threadId, replierId);
 
@@ -17,7 +19,7 @@ function ThreadReplyForm({ threadId, replierId, commentType }) {
 			axios.post("http://localhost:8080/reply/create", {
 				content: commentInput,
 				threadId,
-				replierId,
+				replierId: user.id,
 			});
 
 			window.location.reload();
@@ -32,7 +34,7 @@ function ThreadReplyForm({ threadId, replierId, commentType }) {
 		await axios.post(`http://localhost:8080/reply/${threadId}/replyReply/create`, {
 			content: commentInput,
 			threadReplyId: threadId,
-			replierId: replierId,
+			replierId: user.id,
 		});
 		window.location.reload();
 	};

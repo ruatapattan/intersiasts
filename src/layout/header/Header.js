@@ -2,9 +2,10 @@ import logo from "../../img/logo.png";
 import { Link, useHistory } from "react-router-dom";
 import { useHeaderHere } from "../../contexts/HeaderHereContext";
 import { AuthContext } from "../../contexts/AuthContext";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { removeToken } from "../../services/localstorage";
-import { BellFill } from "react-bootstrap-icons";
+import { BellFill, PersonFill } from "react-bootstrap-icons";
+import axios from "../../config/axios";
 
 function Header() {
 	const history = useHistory();
@@ -13,6 +14,7 @@ function Header() {
 	// console.log(user);
 
 	const [clickedProfile, setClickedProfile] = useState(false);
+	const [userInfo, setUserInfo] = useState({});
 
 	const handleClickSignOut = async (e) => {
 		e.preventDefault();
@@ -22,6 +24,16 @@ function Header() {
 		setClickedProfile((cur) => !cur);
 		history.push("/");
 	};
+
+	useEffect(() => {
+		const fetch = async () => {
+			const result = await axios.get(`/profile/${user?.id}`);
+			setUserInfo(result?.data?.userProfile);
+		};
+		fetch();
+	}, []);
+
+	console.log(userInfo?.profilePic?.secure_url);
 
 	return (
 		<>
@@ -59,9 +71,22 @@ function Header() {
 										<BellFill />
 									</Link>
 								</li>
+
 								<li className="userPic">
 									<Link to="#" onClick={() => setClickedProfile((cur) => !cur)}>
-										<img src="./img/pfpic.png" alt="" />
+										{userInfo?.profilePic !== null ? (
+											<img src={userInfo?.profilePic?.secure_url} alt="" />
+										) : (
+											<PersonFill
+												style={{
+													fontSize: "30px",
+													background: "slateBlue",
+													borderRadius: "50%",
+													width: "100%",
+													height: "100%",
+												}}
+											/>
+										)}
 									</Link>
 								</li>
 							</>
