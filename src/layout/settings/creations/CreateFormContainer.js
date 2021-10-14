@@ -32,6 +32,10 @@ function CreateFormContainer({ createInfo }) {
 
 	const [tagList, setTagList] = useState([]);
 	const [addingTag, setaddingTag] = useState(false);
+	const [communityNameError, setCommunityNameError] = useState("");
+	const [imageError, setImageError] = useState("");
+	const [TagError, setTagError] = useState("");
+	const [descriptionError, setDescriptionError] = useState("");
 
 	const [createInput, setCreateInput] = useState({
 		name: "",
@@ -57,6 +61,7 @@ function CreateFormContainer({ createInfo }) {
 
 	const handleChangeTagSelect = (e) => {
 		if (e.target.value !== "placeHolder" && !tagsSelected.includes(e.target.value)) {
+			setTagError("");
 			const clone = [...tagsSelected];
 			clone.push(e.target.value);
 			setTagsSelected(clone);
@@ -74,42 +79,63 @@ function CreateFormContainer({ createInfo }) {
 
 	const handleChooseImage = (e) => {
 		e.preventDefault();
-
-		setShowImage(e.target.files[0]);
-		setCreateInput((cur) => ({ ...cur, image: e.target.files[0] }));
+		setImageError("");
+		if (!e.target.files[0].type.includes("image/")) {
+			setImageError("must be an image file");
+		} else {
+			setShowImage(e.target.files[0]);
+			setCreateInput((cur) => ({ ...cur, image: e.target.files[0] }));
+		}
 	};
 
 	const handleClickSubmit = async (e) => {
 		e.preventDefault();
 		try {
 			if (createInfo.type === "Create Community") {
-				const formData = new FormData();
-				formData.append("communityName", createInput.name);
-				formData.append("userId", user.id);
-				formData.append("description", createInput.content);
-				formData.append("cloudinput", createInput.image);
+				if (
+					createInput.image !== null &&
+					createInput.name !== "" &&
+					createInput.content !== "" &&
+					createInput.tags.length > 0
+				) {
+					const formData = new FormData();
+					formData.append("communityName", createInput.name);
+					formData.append("userId", user.id);
+					formData.append("description", createInput.content);
+					formData.append("cloudinput", createInput.image);
 
-				//formdata cant send data as arr, so you need to append each separately
-				//but use the same fieldname, this way it'll become arr on arrival
-				for (let i = 0; i < createInput.tags.length; i++) {
-					formData.append("tag", createInput.tags[i]);
+					//formdata cant send data as arr, so you need to append each separately
+					//but use the same fieldname, this way it'll become arr on arrival
+					for (let i = 0; i < createInput.tags.length; i++) {
+						formData.append("tag", createInput.tags[i]);
+					}
+
+					const res = await axios.post("http://localhost:8080/createCommunity", formData);
+
+					// redirect to created community
+					history.push(`/community/${res.data.community.id}`);
+				} else {
+					createInput.image === null && setImageError("Community Image Required!");
+					createInput.name === "" && setCommunityNameError("Community Name Required!");
+					createInput.tags.length === 0 && setTagError("At least 1 tag is required!");
+					createInput.content === "" && setDescriptionError("Description is required!");
 				}
-
-				const res = await axios.post("http://localhost:8080/createCommunity", formData);
-
-				//redirect to created community
-				history.push(`/community/${res.data.community.id}`);
 			} else {
-				const formData = new FormData();
-				formData.append("title", createInput.name);
-				formData.append("content", createInput.content);
-				formData.append("posterId", user.id);
-				formData.append("cloudinput", createInput.image);
+				if (createInput.name !== "" && createInput.content !== "") {
+					const formData = new FormData();
+					formData.append("title", createInput.name);
+					formData.append("content", createInput.content);
+					formData.append("posterId", user.id);
+					formData.append("cloudinput", createInput.image);
 
-				const res = await axios.post(`http://localhost:8080/community/${params.id}/createThread`, formData);
+					const res = await axios.post(`http://localhost:8080/community/${params.id}/createThread`, formData);
 
-				//redirect to created thread
-				history.push(`/community/${params.id}/thread/${res.data.thread.id}`);
+					//redirect to created thread
+					history.push(`/community/${params.id}/thread/${res.data.thread.id}`);
+				} else {
+					createInput.name === "" && setCommunityNameError("Thread Name Required!");
+					createInput.content === "" && setDescriptionError("Thread Content required!");
+				}
 			}
 		} catch (err) {
 			console.dir(err);
@@ -118,6 +144,19 @@ function CreateFormContainer({ createInfo }) {
 
 	// console.log(createInput);
 	console.log("params", params);
+
+	const handleChangeNameInput = (e) => {
+		if (e.target.value !== "") {
+			setCommunityNameError("");
+		}
+		setCreateInput((cur) => ({ ...cur, name: e.target.value }));
+	};
+	const handleChangeDescriptionInput = (e) => {
+		if (e.target.value !== "") {
+			setDescriptionError("");
+		}
+		setCreateInput((cur) => ({ ...cur, content: e.target.value }));
+	};
 
 	return (
 		<>
@@ -130,8 +169,9 @@ function CreateFormContainer({ createInfo }) {
 						className="editCommunityName"
 						placeholder="Cannot be changed later"
 						value={createInput.name}
-						onChange={(e) => setCreateInput((cur) => ({ ...cur, name: e.target.value }))}
+						onChange={handleChangeNameInput}
 					/>
+					{communityNameError !== "" && <p style={{ color: "red" }}>{communityNameError}</p>}
 				</div>
 
 				{createInfo.type === "Create Community" && (
@@ -166,6 +206,7 @@ function CreateFormContainer({ createInfo }) {
 									</select>
 								)}
 							</div>
+							{TagError !== "" && <p style={{ color: "red" }}>{TagError}</p>}
 						</div>
 						{tagsSelected.length > 0 && (
 							<div>
@@ -190,6 +231,7 @@ function CreateFormContainer({ createInfo }) {
 						// value={createInput.image}
 						onChange={handleChooseImage}
 					/>
+					{imageError !== "" && <p style={{ color: "red" }}>{imageError}</p>}
 				</div>
 
 				<div className="editCommunityDescContainer inputpair">
@@ -200,8 +242,9 @@ function CreateFormContainer({ createInfo }) {
 						rows="10"
 						placeholder={createInfo.contentPlaceholder}
 						value={createInput.content}
-						onChange={(e) => setCreateInput((cur) => ({ ...cur, content: e.target.value }))}
+						onChange={handleChangeDescriptionInput}
 					></textarea>
+					{descriptionError !== "" && <p style={{ color: "red" }}>{descriptionError}</p>}
 				</div>
 
 				<div className="editbtnContainer">

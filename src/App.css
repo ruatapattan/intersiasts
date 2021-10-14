@@ -446,18 +446,18 @@ p > a {
 	transition: transform 500ms;
 }
 
-.expslide:hover a {
+/* .expslide:hover a {
 	transform: translateX(-25%);
-}
+} */
 
 .expslide a:hover {
 	transform: scale(1.5);
 	z-index: 1;
 }
 
-.expslide a:hover ~ a {
+/* .expslide a:hover ~ a {
 	transform: translatex(25%);
-}
+} */
 
 /* --------------------------------------------------------------------------- */
 
@@ -1477,4 +1477,9 @@ th {
 
 .editProfileTable > tr > td:first-child {
 	text-align: right;
+}
+
+.searchedItem:hover {
+	background-color: white;
+	color: #2c2f33;
 }

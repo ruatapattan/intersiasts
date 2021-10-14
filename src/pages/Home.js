@@ -1,7 +1,19 @@
 import Carousel from "../components/Carousel";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "../config/axios";
 
 function Index() {
+	const [allCommunityInfo, setAllCommunityInfo] = useState([]);
+
+	useEffect(() => {
+		const fetch = async () => {
+			const result = await axios.get("/community/browse/all");
+			setAllCommunityInfo(result.data.communities);
+		};
+		fetch();
+	}, []);
+
 	return (
 		<>
 			<div className="tophalf">
@@ -25,7 +37,7 @@ function Index() {
 			<section className="index darkbg">
 				<div className="container section bottomhalf">
 					<h1>Why not look around?</h1>
-					<Carousel />
+					<Carousel communities={allCommunityInfo} />
 					<button className="btn">
 						<Link to="/browse">Browse</Link>
 					</button>

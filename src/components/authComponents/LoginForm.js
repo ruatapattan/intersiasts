@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useContext, useState } from "react";
 import { setToken } from "../../services/localstorage";
-import { useHistory, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import { AuthContext } from "../../contexts/AuthContext";
 import Swal from "sweetalert2";
@@ -84,7 +84,7 @@ function LoginForm() {
 				<label for="remember">Remember Me</label>
 			</div>
 			<p>
-				<a href="./signup.html">Register</a>
+				<Link to="/signup">Register</Link>
 			</p>
 		</form>
 	);

@@ -37,7 +37,7 @@ function CommunitySideBar({ communityData, staticCommunityId }) {
 	const handleClickJoin = async (e) => {
 		e.preventDefault();
 
-		await axios.post(`http://localhost:8080/community/${params.id}/join`);
+		await axios.post(`http://localhost:8080/community/${staticCommunityId}/join`);
 
 		const done = await Swal.fire({
 			title: "You are now a member of this community!",
@@ -101,9 +101,7 @@ function CommunitySideBar({ communityData, staticCommunityId }) {
 			) : (
 				<div className="plus">
 					<div className="btn plusbtn chatNow confirmChanges">
-						<Link to={`#`} onClick={handleClickJoin}>
-							Join Community
-						</Link>
+						<Link onClick={handleClickJoin}>Join Community</Link>
 					</div>
 				</div>
 			)}

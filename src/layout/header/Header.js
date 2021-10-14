@@ -11,10 +11,12 @@ function Header() {
 	const history = useHistory();
 	const { here } = useHeaderHere();
 	const { userRole, user, setUser, setUserRole } = useContext(AuthContext);
+	const [searchKeyword, setSearchKeyword] = useState("");
 	console.log(userRole);
-
+	const [searchedCommunitiesList, setSearchedCommunitiesList] = useState([]);
 	const [clickedProfile, setClickedProfile] = useState(false);
 	const [userInfo, setUserInfo] = useState({});
+	const [showSearchResult, setShowSearchResult] = useState(false);
 
 	const handleClickSignOut = async (e) => {
 		e.preventDefault();
@@ -27,16 +29,33 @@ function Header() {
 	};
 
 	useEffect(() => {
-		const fetch = async () => {
-			if (userRole !== "guest") {
+		if (userRole !== "guest") {
+			const fetch = async () => {
+				console.log("effect");
 				const result = await axios.get(`/profile/${user.id}`);
 				setUserInfo(result?.data?.userProfile);
-			}
-		};
-		fetch();
+			};
+			fetch();
+		}
 	}, []);
 
-	// console.log(userInfo?.profilePic?.secure_url);
+	const handleClickSearch = async (e) => {
+		const found = await axios.get(`http://localhost:8080/community/search/name/${searchKeyword}`);
+		setSearchedCommunitiesList(found.data.foundCommunities);
+		setShowSearchResult((cur) => !cur);
+	};
+
+	const handleClickToSearchedCommunity = (communityId) => {
+		history.push(`/community/${communityId}`);
+		window.location.reload();
+	};
+
+	const handleChangeSearchInput = (e) => {
+		setSearchKeyword(e.target.value);
+		if (!e.target.value) {
+			setShowSearchResult(false);
+		}
+	};
 
 	return (
 		<>
@@ -47,10 +66,59 @@ function Header() {
 							<img src={logo} alt="logo" className="logoimg" />
 						</Link>
 					</div>
-					<div className="searchBar head">
-						<input type="text" placeholder="Search.." name="search" className="textInput" />
-						<button className="btn srchbtn">Search</button>
-					</div>
+					{userRole !== "guest" && (
+						<div className="searchBar head">
+							<input
+								type="text"
+								placeholder="Search communities.."
+								name="search"
+								className="textInput"
+								value={searchKeyword}
+								onChange={handleChangeSearchInput}
+							/>
+							<button type="button" className="btn srchbtn" onClick={handleClickSearch}>
+								Search
+							</button>
+							{showSearchResult && (
+								<ul
+									style={{
+										border: "1px solid white",
+										backgroundColor: "rgba(35, 39, 42)",
+										border: "1px solid slateGrey",
+										borderRadius: "5px",
+										position: "absolute",
+										minWidth: "30%",
+										top: "6vh",
+									}}
+								>
+									{searchedCommunitiesList?.map((item) => (
+										<li
+											className="searchedItem"
+											style={{
+												display: "flex",
+												justifyItems: "center",
+												alignItems: "center",
+												margin: "1rem",
+												boxSizing: "border-box",
+												borderBottom: "1px solid white",
+												padding: "0.5rem",
+												cursor: "pointer",
+											}}
+											onClick={() => handleClickToSearchedCommunity(item?.id)}
+										>
+											<img
+												style={{ width: "50px", height: "50px" }}
+												src={item?.communityImage?.secure_url}
+											/>
+											<p style={{ marginLeft: "1rem", textAlign: "left" }}>
+												{item?.communityName}
+											</p>
+										</li>
+									))}
+								</ul>
+							)}
+						</div>
+					)}
 					<ul className="navbar head">
 						<li className={here === "/" ? `here` : ""}>
 							<Link to="/">Home</Link>
@@ -101,6 +169,7 @@ function Header() {
 				<div
 					style={{
 						position: "fixed",
+						padding: "1rem",
 						right: 0,
 						backgroundColor: "rgba(35, 39, 42, 0.4)",
 						border: "1px solid slateGrey",
@@ -112,24 +181,31 @@ function Header() {
 						flexDirection: "column",
 						justifyContent: "center",
 						alignItems: "flex-start",
+						zIndex: 100,
 						// alignItems: "center",
 					}}
 				>
 					<Link
-						style={{ margin: "0.4rem" }}
+						className="searchedItem"
+						style={{ margin: "0.4rem", width: "100%" }}
 						to="/createCommunity"
 						onClick={() => setClickedProfile((cur) => !cur)}
 					>
 						Create Community
 					</Link>
 					<Link
-						style={{ margin: "0.4rem" }}
+						className="searchedItem"
+						style={{ margin: "0.4rem", width: "100%" }}
 						to={`/profile/${user.id}`}
 						onClick={() => setClickedProfile((cur) => !cur)}
 					>
 						My Profile
 					</Link>
-					<Link style={{ margin: "0.4rem" }} to="" onClick={handleClickSignOut}>
+					<Link
+						className="searchedItem"
+						style={{ margin: "0.4rem", width: "100%" }}
+						onClick={handleClickSignOut}
+					>
 						Sign Out
 					</Link>
 				</div>

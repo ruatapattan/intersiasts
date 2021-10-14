@@ -10,14 +10,16 @@ import Slider from "react-slick";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 
 const imgArr = [dnd, grow, chess, brew];
 
 function Carousel({ communities }) {
+	const { userRole } = useContext(AuthContext);
 	const history = useHistory();
 	const [imgIdx, setImgIdx] = useState(0);
 	console.log(communities);
@@ -32,7 +34,7 @@ function Carousel({ communities }) {
 		slidesToShow: 3,
 		centerMode: true,
 		centerPadding: 0,
-		// autoplay: true,
+		autoplay: true,
 		autoplaySpeed: 4000,
 		pauseOnHover: true,
 		beforeChange: (cur, next) => setImgIdx(next),
@@ -61,12 +63,16 @@ function Carousel({ communities }) {
 			},
 		});
 		if (visit.isConfirmed) {
-			history.push(`/community/${selectedCommunity.id}`);
+			if (userRole !== "guest") {
+				history.push(`/community/${selectedCommunity.id}`);
+			} else {
+				history.push(`/signup`);
+			}
 		}
 	};
 
 	return (
-		<Slider {...settings} className="carouselBox">
+		<Slider {...settings} className="carouselBox" style={{ cursor: "pointer" }}>
 			{communities?.map((item, idx) => (
 				<div key={idx} className={idx === imgIdx ? "slide activeSlide" : "slide"}>
 					<img

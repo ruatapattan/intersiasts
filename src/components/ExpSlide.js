@@ -15,12 +15,15 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Link, useHistory } from "react-router-dom";
 import Swal from "sweetalert2";
+import { AuthContext } from "../contexts/AuthContext";
+import { useContext } from "react";
 
 // const imgArr = [dnd, grow, chess, brew, water, hops, knit, mixology, winebrew, coding];
 
 function ExpSlide({ title, joinedCommunityList }) {
+	const { userRole } = useContext(AuthContext);
 	const history = useHistory();
-	console.log(joinedCommunityList);
+	console.log("joined", joinedCommunityList);
 
 	const slidesToShow = joinedCommunityList?.length < 5 ? joinedCommunityList?.length : 5;
 	const slidesToScroll = joinedCommunityList?.length < 5 ? joinedCommunityList?.length : 5;
@@ -58,7 +61,11 @@ function ExpSlide({ title, joinedCommunityList }) {
 			},
 		});
 		if (visit.isConfirmed) {
-			history.push(`/community/${selectedCommunity?.Community?.id}`);
+			if (userRole !== "guest") {
+				history.push(`/community/${selectedCommunity?.Community?.id}`);
+			} else {
+				history.push(`/signup`);
+			}
 		}
 	};
 
@@ -67,11 +74,19 @@ function ExpSlide({ title, joinedCommunityList }) {
 		<section className="expSlideContainer">
 			<h3>{title ?? "Your Community"}</h3>
 			<Slider {...settings} className="expSlideBox">
-				{joinedCommunityList?.map((item, idx) => (
-					<Link to="#" onClick={() => handleClickCommunityPopup(item)} className="expSlider" key={idx}>
-						<img className="expImage" src={item?.Community?.communityImage?.secure_url} alt="" />
-					</Link>
-				))}
+				{joinedCommunityList?.map(
+					(item, idx) =>
+						item?.Community !== null && (
+							<Link
+								to="#"
+								onClick={() => handleClickCommunityPopup(item)}
+								className="expSlider"
+								key={idx}
+							>
+								<img className="expImage" src={item?.Community?.communityImage?.secure_url} alt="" />
+							</Link>
+						)
+				)}
 				{/* {imgArr.map((item, idx) => (
 					<div className="expSlider" key={idx}>
 						<img className="expImage" src={item} alt="" />

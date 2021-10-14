@@ -7,7 +7,7 @@ import axios from "../config/axios";
 import { AuthContext } from "../contexts/AuthContext";
 import { ToggleOff, ToggleOn } from "react-bootstrap-icons";
 function Browse() {
-	const { user } = useContext(AuthContext);
+	const { user, userRole } = useContext(AuthContext);
 	const [allCommunityInfo, setAllCommunityInfo] = useState([]);
 	const [joinedCommunityList, setJoinedCommunityList] = useState([]);
 	const [filteredCommunityList, setFilteredCommunityList] = useState([]);
@@ -15,25 +15,34 @@ function Browse() {
 	const [toggleView, setToggleView] = useState("slide");
 
 	const history = useHistory();
+
+	const randomSort = (a, b) => {
+		return 0.5 - Math.random();
+	};
+
 	useEffect(() => {
 		const fetch = async () => {
 			const result = await axios.get("/community/browse/all");
+			// console.log(result.data.communities);
+			// console.log(result.data.communities.sort(randomSort));
 			setAllCommunityInfo(result.data.communities);
 
 			//fetch joined only
-			const joinedCommunity = await axios.get(`/community/browse/${user.id}/joined`);
-			// console.log("joined inside", joinedCommunity);
-			setJoinedCommunityList(joinedCommunity.data.joinedCommunities);
-
+			if (userRole !== "guest") {
+				const joinedCommunity = await axios.get(`/community/browse/${user.id}/joined`);
+				// console.log("joined inside", joinedCommunity);
+				setJoinedCommunityList(joinedCommunity.data.joinedCommunities);
+			}
 			const tagResult = await axios.get("http://localhost:8080/createCommunity");
 			setTagList([...tagResult.data.tags]);
 		};
 		fetch();
 	}, []);
 
-	// console.log(allCommunityInfo);
-	// console.log(tagList);
-	console.log("original", allCommunityInfo);
+	//random communities
+	const randomed = [...allCommunityInfo].sort(randomSort);
+	// console.log("original", allCommunityInfo);
+	// console.log("randomed", randomed);
 
 	const handleChangeFilterByTag = async (e) => {
 		const filtered = await axios.get(`/community/browse/tag/${e.target.value}`);
@@ -74,6 +83,9 @@ function Browse() {
 	console.log("all info", allCommunityInfo);
 	const toUse = allCommunityInfo.map((item) => ({ Community: item }));
 
+	// console.log(allCommunityInfo);
+	// console.log(allCommunityInfo.sort(() => Math.random() - 0.5));
+
 	return (
 		<>
 			{/* <!-- section1: slide --> */}
@@ -81,19 +93,18 @@ function Browse() {
 				<div className="container section bottomhalf navSpace">
 					<h1>Recommended Communities</h1>
 					<br />
-					<Carousel communities={allCommunityInfo} />
+					<Carousel communities={randomed} />
 				</div>
 			</section>
 
 			{/* <!-- section2: my communities --> */}
-			<ExpSlide joinedCommunityList={joinedCommunityList} title="Communities Joined" />
-
+			{userRole !== "guest" && <ExpSlide joinedCommunityList={joinedCommunityList} title="Communities Joined" />}
 			{/* <!-- section3: filter communities -->*/}
 			<div>
 				<div
 					style={{ marginLeft: "1rem", display: "flex", alignItems: "center", justifyContent: "flex-start" }}
 				>
-					<h3>Filter Communities By Id</h3>
+					<h3>Filter Communities By Tag</h3>
 					<select
 						style={{ marginLeft: "1rem" }}
 						className="communityTagFrame"
@@ -116,7 +127,7 @@ function Browse() {
 						))}
 					</select>
 				</div>
-				<ExpSlide title="Filtered Communities" joinedCommunityList={filteredCommunityList} />
+				<ExpSlide title="Filtered Communities Result:" joinedCommunityList={filteredCommunityList} />
 			</div>
 
 			{/* <!-- section4: cuz you joined --> */}

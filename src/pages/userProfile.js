@@ -44,7 +44,7 @@ function UserProfile() {
 	}, []);
 
 	// console.log(userInfo?.id);
-	console.log("joined list", joinedCommunityList);
+	// console.log("joined list", joinedCommunityList);
 
 	// useEffect(() => {
 	// 	setUserCommunities(
@@ -84,7 +84,9 @@ function UserProfile() {
 
 	const handleChangeEmail = (e) => {
 		setEditProfileInput((cur) => ({ ...cur, email: e.target.value }));
-		if (!validator.isEmail(editProfileInput.email)) {
+		if (e.target.value === "") {
+			setEmailError("");
+		} else if (!validator.isEmail(editProfileInput.email)) {
 			setEmailError("invalid email format");
 		} else {
 			setEmailError("");
@@ -135,43 +137,50 @@ function UserProfile() {
 	};
 	const handleSubmitEditProfile = async (e) => {
 		e.preventDefault();
-		if (emailError === "" && passwordError === "" && passwordConfirmError === "" && imageError === "") {
-			if (
-				editProfileInput.email === "" &&
-				editProfileInput.password === "" &&
-				editProfileInput.profilePic === null
-			) {
-				console.log("hii");
-				Swal.fire({
-					title: "You didn't change anything.",
-					background: "#23272a",
-					customClass: {
-						htmlContainer: "whiteText",
-						title: "whiteText",
-					},
-				});
-			} else {
-				console.log("hii");
-				const formData = new FormData();
-				if (editProfileInput.email !== "") {
-					formData.append("email", editProfileInput.email);
+		try {
+			if (emailError === "" && passwordError === "" && passwordConfirmError === "" && imageError === "") {
+				if (
+					editProfileInput.email === "" &&
+					editProfileInput.password === "" &&
+					editProfileInput.profilePic === null
+				) {
+					console.log("hii");
+					Swal.fire({
+						title: "You didn't change anything.",
+						background: "#23272a",
+						customClass: {
+							htmlContainer: "whiteText",
+							title: "whiteText",
+						},
+					});
+				} else {
+					console.log("hii");
+					const formData = new FormData();
+					if (editProfileInput.email !== "") {
+						formData.append("email", editProfileInput.email);
+					}
+					if (editProfileInput.password !== "") {
+						formData.append("password", editProfileInput.password);
+					}
+					if (editProfileInput.profilePic !== null) {
+						formData.append("cloudinput", editProfileInput.profilePic);
+					}
+					const edited = await axios.put(`/profile/${params.id}/edit`, formData);
+					const done = await Swal.fire({
+						title: "change successful.",
+						background: "#23272a",
+						customClass: {
+							htmlContainer: "whiteText",
+							title: "whiteText",
+						},
+					});
+					if (done.isConfirmed) window.location.reload();
 				}
-				if (editProfileInput.password !== "") {
-					formData.append("password", editProfileInput.password);
-				}
-				if (editProfileInput.profilePic !== null) {
-					formData.append("cloudinput", editProfileInput.profilePic);
-				}
-				const edited = await axios.put(`/profile/${params.id}/edit`, formData);
-				const done = await Swal.fire({
-					title: "change successful.",
-					background: "#23272a",
-					customClass: {
-						htmlContainer: "whiteText",
-						title: "whiteText",
-					},
-				});
-				if (done.isConfirmed) window.location.reload();
+			}
+		} catch (err) {
+			console.dir(err);
+			if (err.response && err.response.data.message.emailSame) {
+				setEmailError(err.response.data.message.emailSame);
 			}
 		}
 	};
@@ -229,6 +238,7 @@ function UserProfile() {
 							{currentSideBarNav === "profile" && (
 								<>
 									<p> Email : {userInfo?.email}</p>
+									<p> Birth Date : {userInfo?.birthDate}</p>
 									<div style={{ width: "100%", marginBottom: "1rem" }}>
 										<ExpSlide joinedCommunityList={joinedCommunityList} />
 									</div>

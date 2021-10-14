@@ -56,8 +56,6 @@ function SignupForm() {
 		}
 	};
 
-	console.log(userInput?.username);
-
 	const handleInputEmail = (e) => {
 		console.log(validator.isEmail(e.target.value));
 		setUserInput((cur) => ({ ...cur, email: e.target.value }));
@@ -82,7 +80,7 @@ function SignupForm() {
 
 	const handleInputBirthDate = (e) => {
 		setUserInput((cur) => ({ ...cur, birthDate: e.target.value }));
-		if (userInput.birthDate) {
+		if (e.target.value) {
 			setError((cur) => ({ ...cur, birthDate: "" }));
 		}
 	};
@@ -103,7 +101,7 @@ function SignupForm() {
 				setError((cur) => ({ ...cur, birthDate: "birth date is required" }));
 			} else if (Object.values(error).every((item) => item === "")) {
 				console.log("no error");
-				// await axios.post("/register", { ...userInput });
+				await axios.post("/register", { ...userInput });
 				history.push({
 					pathname: "/login",
 					state: { successMessage: "Account Created" },
@@ -141,8 +139,8 @@ function SignupForm() {
 			if (err.response && err.response.data.message.emailChar) {
 				setError((cur) => ({ ...cur, email: err.response.data.message.emailChar }));
 			}
-			if (err.response && err.response.data.message.emailLength) {
-				setError((cur) => ({ ...cur, email: err.response.data.message.emailChar }));
+			if (err.response && err.response.data.message.emailSame) {
+				setError((cur) => ({ ...cur, email: "email already in use!" }));
 			}
 			// //birthdate error
 			// if (!userInput.birthDate) {
