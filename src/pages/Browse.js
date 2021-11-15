@@ -1,157 +1,190 @@
-import dnd from "../img/dnd.jpg";
-
+import { useEffect, useState, useContext } from "react";
+import { Link, useHistory } from "react-router-dom";
+import Swal from "sweetalert2";
+import Carousel from "../components/Carousel";
+import ExpSlide from "../components/ExpSlide";
+import axios from "../config/axios";
+import { AuthContext } from "../contexts/AuthContext";
+import { ToggleOff, ToggleOn } from "react-bootstrap-icons";
 function Browse() {
+	const { user, userRole } = useContext(AuthContext);
+	const [allCommunityInfo, setAllCommunityInfo] = useState([]);
+	const [joinedCommunityList, setJoinedCommunityList] = useState([]);
+	const [filteredCommunityList, setFilteredCommunityList] = useState([]);
+	const [tagList, setTagList] = useState([]);
+	const [toggleView, setToggleView] = useState("slide");
+
+	const history = useHistory();
+
+	const randomSort = (a, b) => {
+		return 0.5 - Math.random();
+	};
+
+	useEffect(() => {
+		const fetch = async () => {
+			const result = await axios.get("/community/browse/all");
+			// console.log(result.data.communities);
+			// console.log(result.data.communities.sort(randomSort));
+			setAllCommunityInfo(result.data.communities);
+
+			//fetch joined only
+			if (userRole !== "guest") {
+				const joinedCommunity = await axios.get(`/community/browse/${user.id}/joined`);
+				// console.log("joined inside", joinedCommunity);
+				setJoinedCommunityList(joinedCommunity.data.joinedCommunities);
+			}
+			const tagResult = await axios.get("http://localhost:8080/createCommunity");
+			setTagList([...tagResult.data.tags]);
+		};
+		fetch();
+	}, []);
+
+	//random communities
+	const randomed = [...allCommunityInfo].sort(randomSort);
+	// console.log("original", allCommunityInfo);
+	// console.log("randomed", randomed);
+
+	const handleChangeFilterByTag = async (e) => {
+		const filtered = await axios.get(`/community/browse/tag/${e.target.value}`);
+		console.log("filtered", filtered.data.filteredCommunities);
+		setFilteredCommunityList(filtered?.data?.filteredCommunities);
+	};
+
+	const handleClickCommunityPopup = async (selectedCommunity) => {
+		console.log("selected", selectedCommunity);
+		// let placeholder;
+
+		const tags = selectedCommunity?.CommunityTags.map((item) => item?.Tag?.tagName).join(", ");
+
+		// const tags = selectedCommunity?.CommunityTags?.map((item) => item?.Tag?.tagName).join(", ");
+
+		const visit = await Swal.fire({
+			title: selectedCommunity?.communityName,
+			text: `Tags: ${tags}`,
+			imageUrl: selectedCommunity?.communityImage?.secure_url,
+			imageWidth: "20rem",
+			imageHeight: "20rem",
+			background: "#23272a",
+			showCancelButton: true,
+			confirmButtonColor: "slateBlue",
+			cancelButtonColor: "#23272a",
+			confirmButtonText: "Visit Community",
+			cancelButtonText: "Maybe later",
+			customClass: {
+				htmlContainer: "whiteText",
+				title: "whiteText",
+			},
+		});
+		if (visit.isConfirmed) {
+			history.push(`/community/${selectedCommunity?.Community?.id}`);
+		}
+	};
+
+	console.log("all info", allCommunityInfo);
+	const toUse = allCommunityInfo.map((item) => ({ Community: item }));
+
+	// console.log(allCommunityInfo);
+	// console.log(allCommunityInfo.sort(() => Math.random() - 0.5));
+
 	return (
 		<>
-			<header>
-				<div className="container header">
-					<div className="logo head">
-						<img src="./img/logo.png" alt="logo" className="logoimg" />
-					</div>
-					<div className="searchBar head">
-						<input type="text" placeholder="Search.." name="search" className="textInput" />
-						<button className="btn srchbtn">Search</button>
-					</div>
-					<ul className="navbar head">
-						<li>
-							<a href="./index.html">Home</a>
-						</li>
-						<li>
-							<a href="/" className="here">
-								Browse
-							</a>
-						</li>
-						<li>
-							<a href="create.html">Create</a>
-						</li>
-						<li className="userPic">
-							<a href="./profile.html">
-								<img src="./img/pfpic.png" alt="" />
-							</a>
-						</li>
-					</ul>
-				</div>
-			</header>
-
 			{/* <!-- section1: slide --> */}
 			<section>
-				<div className="container section bottomhalf">
+				<div className="container section bottomhalf navSpace">
 					<h1>Recommended Communities</h1>
-					<div className="slider">
-						<button className="slidebtn">{"<"}</button>
-						<div className="cardWrapper">
-							<ul className="cardContainer">
-								<li className="card">
-									<a href="/">
-										<img src="./img/grow.jpg" alt="" />
-									</a>
-								</li>
-								<li className="card">
-									<a href="./community.html">
-										<img src="./img/dnd.jpg" alt="" />
-									</a>
-								</li>
-								<li className="card">
-									<a href="/">
-										<img src="./img/dough.jpg" alt="" />
-									</a>
-								</li>
-								{/* <!-- <li className="card">community 4</li>
-                        <li className="card">community 5</li> --> */}
-								{/* <!-- <li className="card">community 6</li>
-                        <li className="card">community 7</li> --> */}
-							</ul>
-						</div>
-						<button className="slidebtn">{">"}</button>
-					</div>
-					{/* <!-- <button className='btn'>Browse</button> --> */}
+					<br />
+					<Carousel communities={randomed} />
 				</div>
 			</section>
 
 			{/* <!-- section2: my communities --> */}
-			<section className="expslideContainer darkbg">
-				<h3>Your Communities</h3>
-				<div className="container expslide">
-					<a href="./community.html">
-						<img src={dnd} alt="" />
-					</a>
-					<a href="/">
-						<img src="./img/chess.jpg" alt="" />
-					</a>
-					<a href="/">
-						<img src="./img/model.jpg" alt="" />
-					</a>
-					<a href="/">
-						<img src="./img/brew.jpg" alt="" />
-					</a>
-					<a href="/">
-						<img src="./img/knit.jpg" alt="" />
-					</a>
-				</div>
-			</section>
-
-			{/* <!-- section3: filter communities -->
-    <!-- filter in js --> */}
-			<section className="expslideContainer">
-				<form action="/">
-					<label for="filterCategory">Filter:</label>
-					<select name="filterCategory">
-						<option value="None">None</option>
-						<option value="outdoor">Outdoor</option>
-						<option value="indoor">Indoor</option>
+			{userRole !== "guest" && <ExpSlide joinedCommunityList={joinedCommunityList} title="Communities Joined" />}
+			{/* <!-- section3: filter communities -->*/}
+			<div>
+				<div
+					style={{ marginLeft: "1rem", display: "flex", alignItems: "center", justifyContent: "flex-start" }}
+				>
+					<h3>Filter Communities By Tag</h3>
+					<select
+						style={{ marginLeft: "1rem" }}
+						className="communityTagFrame"
+						onChange={handleChangeFilterByTag}
+					>
+						<option defaultValue="true" value="placeHolder">
+							Select tag
+						</option>
+						{tagList?.map((item) => (
+							<option
+								key={item.id}
+								value={item.id}
+								className="tagOption"
+								style={{
+									background: "#23272a",
+								}}
+							>
+								{item?.tagName}
+							</option>
+						))}
 					</select>
-
-					{/* <!-- <label for="filterSubCategory">Filter:</label> --> */}
-					<select name="filterSubCategory">
-						<option value="none">None</option>
-						<option value="games">Games</option>
-						<option value="foodDrink">Food&Drink</option>
-					</select>
-				</form>
-				<div className="container expslide">
-					<a href="./community.html">
-						<img src="./img/dnd.jpg" alt="" />
-					</a>
-					<a href="/">
-						<img src="./img/chess.jpg" alt="" />
-					</a>
-					<a href="/">
-						<img src="./img/model.jpg" alt="" />
-					</a>
-					<a href="/">
-						<img src="./img/brew.jpg" alt="" />
-					</a>
-					<a href="/">
-						<img src="./img/knit.jpg" alt="" />
-					</a>
 				</div>
-			</section>
+				<ExpSlide title="Filtered Communities Result:" joinedCommunityList={filteredCommunityList} />
+			</div>
 
 			{/* <!-- section4: cuz you joined --> */}
-			<section className="expslideContainer">
-				<h3>Because you joined: Homebrew Alliance</h3>
-				<div className="container expslide">
-					<a href="/">
-						<img src="./img/water.jpg" alt="" />
-					</a>
-					<a href="/">
-						<img src="./img/winebrew.jpg" alt="" />
-					</a>
-					<a href="/">
-						<img src="./img/hops.jpg" alt="" />
-					</a>
-					<a href="/">
-						<img src="./img/mixology.jpg" alt="" />
-					</a>
-					<a href="/">
-						<img src="./img/beerpong.jpg" alt="" />
-					</a>
-				</div>
-			</section>
 
-			<footer>
-				<p>Intersiasts 2021</p>
-			</footer>
+			<div style={{ display: "flex", alignItems: "center" }}>
+				<h3 style={{ marginLeft: "1rem", marginRight: "1rem" }}>All Communities</h3>
+				<div style={{ display: "flex", alignItems: "center" }}>
+					{toggleView === "slide" ? (
+						<>
+							<h3 style={{ marginRight: "1rem" }}>View: Slide</h3>
+							<ToggleOff fontSize="2rem" onClick={() => setToggleView("grid")} />
+						</>
+					) : (
+						<>
+							<h3 style={{ marginRight: "1rem" }}>View: Grid</h3>
+							<ToggleOn fontSize="2rem" color="slateBlue" onClick={() => setToggleView("slide")} />
+						</>
+					)}
+				</div>
+			</div>
+			{toggleView === "slide" ? (
+				<ExpSlide joinedCommunityList={toUse} title="" />
+			) : (
+				<div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+					<div
+						className="expSlideBox"
+						style={{
+							display: "flex",
+							justifyContent: "space-between",
+							alignItems: "center",
+							flexWrap: "wrap",
+							width: "80%",
+							textAlign: "center",
+						}}
+					>
+						{allCommunityInfo?.map((item, idx) => (
+							// <p style={{ marginRight: "1rem" }}>bnjklhjkl;hjklhjk </p>
+
+							<Link
+								to="#"
+								onClick={() => handleClickCommunityPopup(item)}
+								className="expSlider"
+								key={idx}
+								style={{ width: "200px", height: "200px", margin: "1rem 1rem" }}
+							>
+								<img
+									className="expImage"
+									onClick={() => handleClickCommunityPopup(item)}
+									src={item?.communityImage?.secure_url}
+								/>
+							</Link>
+
+							// 	<img className="expImage" src={item?.Community?.communityImage?.secure_url} alt="" />
+						))}
+					</div>
+				</div>
+			)}
 		</>
 	);
 }

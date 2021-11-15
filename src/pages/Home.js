@@ -1,10 +1,17 @@
-import { useEffect } from "react";
 import Carousel from "../components/Carousel";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "../config/axios";
 
 function Index() {
+	const [allCommunityInfo, setAllCommunityInfo] = useState([]);
+
 	useEffect(() => {
-		document.title = "Home";
+		const fetch = async () => {
+			const result = await axios.get("/community/browse/all");
+			setAllCommunityInfo(result.data.communities);
+		};
+		fetch();
 	}, []);
 
 	return (
@@ -30,7 +37,7 @@ function Index() {
 			<section className="index darkbg">
 				<div className="container section bottomhalf">
 					<h1>Why not look around?</h1>
-					<Carousel />
+					<Carousel communities={allCommunityInfo} />
 					<button className="btn">
 						<Link to="/browse">Browse</Link>
 					</button>
@@ -41,3 +48,15 @@ function Index() {
 }
 
 export default Index;
+
+// import Carousel from "../components/Carousel";
+
+// function Home() {
+// 	return (
+// 		<div className="navSpace" style={{ width: "1000px" }}>
+// 			{/* <Carousel /> */}
+// 		</div>
+// 	);
+// }
+
+// export default Home;

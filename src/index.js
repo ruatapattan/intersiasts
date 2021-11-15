@@ -1,10 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-
+import { AuthContextProvider } from "./contexts/AuthContext";
+import { HeaderHereProvider } from "./contexts/HeaderHereContext";
+import Footer from "./layout/footer/Footer";
 ReactDOM.render(
 	<React.StrictMode>
-		<App />
+		<BrowserRouter>
+			<AuthContextProvider>
+				<HeaderHereProvider>
+					<App />
+					<Footer />
+				</HeaderHereProvider>
+			</AuthContextProvider>
+		</BrowserRouter>
 	</React.StrictMode>,
 	document.getElementById("root")
 );

@@ -1,112 +1,76 @@
-import { Link } from "react-router-dom";
+import ThreadList from "../components/community/ThreadList";
+import ExpSlide from "../components/ExpSlide";
+import CommunitySideBar from "../components/sidebars/CommunitySideBar";
+import axios from "../config/axios";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
 
 function Community() {
+	// useContext
+	const [communityData, setCommunityData] = useState({});
+
+	// const { setCommunityData, communityData } = useContext(CommunityContext);
+
+	const params = useParams();
+	// console.log(params.communityId);
+	//useContext()
+	//useeffect => get Id from useparam {
+	// res = axios => fetch all threads
+	// set contextState
+	// }
+	useEffect(() => {
+		console.log("hello");
+		const fetch = async () => {
+			// console.log(params.id);
+			const fetchedThreads = await axios.get(`http://localhost:8080/community/${params.communityId}`);
+			setCommunityData({ ...fetchedThreads.data });
+		};
+		fetch();
+	}, []);
+
+	console.log("communityData: ", communityData);
+
 	return (
 		<>
-			<header>
-				<div class="container header">
-					<div class="logo head">
-						<img src="./img/logo.png" alt="logo" class="logoimg" />
-					</div>
-					<div class="searchBar head">
-						<input type="text" placeholder="Search.." name="search" class="textInput" />
-						<button class="btn srchbtn">Search</button>
-					</div>
-					<ul class="navbar head">
-						<li>
-							<a href="./index.html">Home</a>
-						</li>
-						<li>
-							<a href="browse.html">Browse</a>
-						</li>
-						<li>
-							<a href="create.html">Create</a>
-						</li>
-						<li class="userPic">
-							<a href="./profile.html">
-								<img src="./img/pfpic.png" alt="" />
-							</a>
-						</li>
-					</ul>
-				</div>
-			</header>
-
 			<section>
-				<div class="container compartment">
-					<div class="sidebar left w30 communitySideBar">
-						<div class="sidebarContent centerContent">
-							<div class="picFrame">
-								<img src="./img/dnd.jpg" alt="" />
-							</div>
-							<p>Welcome to:</p>
-							<p class="t40">DnD [TH]</p>
-							<div>
-								<div class="flexRow">
-									<p class="m0">Member:</p>
-									<p class="memberCount m0">0</p>
-								</div>
-								<div class="flexRow">
-									<p class="m0">Online:</p>
-									<p class="memberOnline m0">0</p>
-								</div>
-							</div>
-						</div>
-						<div class="plus">
-							<div class="btn plusbtn chatNow">
-								<a href="/">Chat Now</a>
-							</div>
-						</div>
+				<div className="container compartment navSpace">
+					{Object.keys(communityData).length > 0 && (
+						<>
+							<CommunitySideBar communityData={communityData} staticCommunityId={params.communityId} />
 
-						<div class="communitySettings">
-							<Link to="/community/:id/settings/general">
-								<div class="btn settingsbtn">
-									<img src="./img/icon/setting.png" alt="" />
-								</div>
-							</Link>
-						</div>
-					</div>
+							<div className="center w70">
+								<div className="centerContent">
+									{/* <!-- event table --> */}
+									{/* <div className="eventTableContainer">
+										<p>Event Schedule</p>
+										<table className="eventTable">
+											<tr>
+												<th>Date</th>
+												<th>Time</th>
+												<th>Event</th>
+											</tr>
+											<tr>
+												<td>-</td>
+												<td>-</td>
+												<td>-</td>
+											</tr>
+										</table>
+									</div> */}
+									<div style={{ width: "100%", textAlign: "center" }}>
+										<h2>About this community:</h2>
+										<p>{communityData?.community?.description}</p>
+									</div>
+									<br />
+									{/* recent memories */}
+									<ExpSlide />
 
-					<div class="center w70">
-						<div class="centerContent">
-							{/* <!-- event table --> */}
-							<div class="eventTableContainer">
-								<p>Event Schedule</p>
-								<table class="eventTable">
-									<tr>
-										<th>Date</th>
-										<th>Time</th>
-										<th>Event</th>
-									</tr>
-									<tr>
-										<td>-</td>
-										<td>-</td>
-										<td>-</td>
-									</tr>
-								</table>
+									<ThreadList communityData={communityData} />
+								</div>
 							</div>
-
-							<section class="expslideContainer memoriesSlide">
-								<p class="textCenter">Recent Memories</p>
-								<div class="container expslide">
-									<a href="/">
-										<img src="./img/memories/memory1.png" alt="" />
-									</a>
-									<a href="/">
-										<img src="./img/memories/memory3.jpg" alt="" />
-									</a>
-									<a href="/">
-										<img src="./img/memories/memory4.png" alt="" />
-									</a>
-								</div>
-							</section>
-						</div>
-					</div>
+						</>
+					)}
 				</div>
 			</section>
-
-			<footer>
-				<p>Intersiasts 2021</p>
-			</footer>
 		</>
 	);
 }
